@@ -4,8 +4,8 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="card-header">
-                <h4> Add Product
-                    <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm float-right">Back</a>
+                <h4> Danh sách sản phẩm
+                    <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm float-right">Thêm sản phẩm</a>
 
                 </h4>
             </div>
@@ -50,8 +50,17 @@
                                 </td>
                                 <td class="" scope="row">
                                     <a href="{{ route('product.edit', ['product' => $item]) }}">
-                                        <button class="primary">Sửa</button>
+                                        <button class="btn-primary">Sửa</button>
                                     </a>
+                                    <form class="d-inline " action="{{ route('product.destroy', ['product' => $item]) }}"
+                                        method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <a href="{{ route('product.destroy', ['product' => $item]) }}">
+                                            <button class="btn-primary"
+                                                onclick="return confirm('Bạn muốn xóa sản phẩm này?')">Xóa</button>
+                                        </a>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

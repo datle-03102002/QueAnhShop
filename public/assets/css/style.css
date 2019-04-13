@@ -3504,38 +3504,6 @@ blockquote p {
    border-radius: 50%;
 }
 
-.single-product .product-image .product-countdown {
-   position: absolute;
-   top: 50%;
-   right: 10px;
-   -webkit-transform: translateY(-50%);
-   -ms-transform: translateY(-50%);
-   transform: translateY(-50%);
-   -webkit-transition: all 0.3s linear;
-   -o-transition: all 0.3s linear;
-   transition: all 0.3s linear;
-}
-
-.single-product .product-image .product-countdown .single-count {
-   width: 50px;
-   height: 50px;
-   background-color: #000;
-   text-align: center;
-   margin-top: 1px;
-}
-
-.single-product .product-image .product-countdown .single-count .count {
-   font-size: 15px;
-   font-weight: 500;
-   color: var(--primary-color);
-   line-height: 16px;
-}
-
-.single-product .product-image .product-countdown .single-count p {
-   font-size: 12px;
-   color: var(--primary-color);
-   line-height: 16px;
-}
 
 .single-product .product-content {
    padding-top: 22px;
@@ -3566,6 +3534,10 @@ blockquote p {
 
 .single-product .product-content .product-name {
    margin-bottom: 0;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 2;
+   overflow: hidden;
 }
 
 .single-product .product-content .product-name a {
@@ -10335,3 +10307,97 @@ input[type=checkbox] {
    border-bottom-left-radius: 0.5em;
    border-bottom-right-radius: 0.5em;
 }
+
+
+
+.model {
+   display: none;
+   z-index: 999;
+   height: 100vh;
+   width: 100vw;
+   position: fixed;
+
+}
+
+.model.active {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.model .model-content {
+   height: 200px;
+   width: 400px;
+   text-align: center;
+   background-color: white;
+   border: 1px solid black;
+   padding-top: 10px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.model .model-content .box-size,
+.model .model-content .box-color {
+   width: 100%;
+   display: flex;
+   gap: 10px;
+   justify-content: center;
+}
+
+.model .model-content .box-size input[type=radio],
+.model .model-content .box-color input[type=radio] {
+   display: none;
+}
+
+.model .model-content .box-size label,
+.model .model-content .box-color label {
+   background-color: gray;
+   width: 100%;
+   min-width: 60px;
+   height: 40px;
+   text-align: center;
+   padding: 10px;
+}
+
+.model .model-content .quantity-item {
+   display: none;
+}
+
+.model .model-content .quantity-item.active {
+   display: block;
+}
+
+
+.model .model-content .box-size input[type=radio]:checked+label,
+.model .model-content .box-color input[type=radio]:checked+label {
+   background-color: var(--primary-color);
+}
+
+.model .model-content .box-quantity input[type=number] {
+   width: unset;
+   max-width: unset;
+   height: 40px;
+   text-align: center;
+   padding: 0;
+   position: relative;
+}
+
+.model .model-content .box-quantity i {
+   cursor: pointer;
+   /* height: 40px */
+}
+
+/* 
+.model .model-content .box-quantity i::before {
+   display: inline-block;
+   height: 100% !important;
+   overflow: unset;
+   /* Thiết lập chiều cao cho biểu tượng bên trong phần tử <i> */
+/* } */
+
+/* */
+
+/* .model .model-content .box-quantity .fa.fa-minus-square {
+   position: absolute;
+} */

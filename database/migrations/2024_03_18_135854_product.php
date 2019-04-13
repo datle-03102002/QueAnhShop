@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description');
             $table->double('price');
             $table->integer('stock');
+            $table->string('slug') ;
             // $table->string('defaultImage');
             // $table->json('listImage');
             $table->boolean('status')->default(false);

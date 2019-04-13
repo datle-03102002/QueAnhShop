@@ -4,29 +4,16 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="card-header">
-                {{-- <h4> Add Product
-                    <a href="{{ route('product') }}" class="btn btn-primary btn-sm float-right">Back</a>
-
-                </h4> --}}
+                <h4>Thêm mới sản phẩm
+                    <a href="{{ route('product.index') }}" class="btn btn-primary btn-sm float-right">Quay lại</a>
+                </h4>
             </div>
-            {{-- <style>
-                .card-body {
-                    border: 1px solid #ccc;
-                    /* Add a border around the div */
-                    padding: 20px;
-                    /* Add space inside the div */
-                    border-radius: 5px;
-                    /* Add rounded corners for a box-like appearance */
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                    /* Add a shadow to give it depth */
-                }
-            </style> --}}
             <div class="card-body container ">
                 <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md mb-3">
-                            <label>Name
+                            <label>Tên sản phẩm
                             </label>
                             <input type="text" name="name" class="form-control" />
                             @error('name')
@@ -35,9 +22,9 @@
                         </div>
 
                         <div class="col-md mb-3">
-                            <label for="category">Category</label>
-                            <select class="form-control" id="category" name="category">
-                                <option value="">Select Category</option>
+                            <label for="category">Danh mục sản phẩm</label>
+                            <select class="form-select " id="category" name="category">
+                                <option class="" value="">Chọn danh mục</option>
                                 @foreach ($category as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
@@ -52,40 +39,37 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
-                            <label>Quantity
-                            </label><br>
-                            <input type="number" name="quantity" id="quantity" class="form-control" min="1"
-                                step="1" />
-                            @error('quantity')
+                        {{-- <div class="row"> --}}
+                        <div class="col-md-6 mb-3">
+                            <label>Hình ảnh</label>
+                            <input type="file" name="image[]" multiple class="form-control" />
+                            @error('image')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-
+                        {{-- </div> --}}
                         <div class="col-6">
-                            <label>Price
+                            <label>Giá tiền
                             </label>
                             <input type="number" name="price" class="form-control" />
                             @error('price')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
-
                         </div>
                     </div>
-
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="container ">
                             <div class="row">
                                 <div class="container-fluid col-6">
-                                    <label>Available Sizes</label>
-                                    <div class="row enableInput" style="max-width: 300px;">
+                                    <label>Kích thước: </label>
+                                    <div class="row mt-2 enableInput" style="max-width: 350px;">
                                         <div class="col-sm">
                                             <label>Small :</label>
                                             <input type="checkbox" name="size[]" value="small" id="enableInput"
                                                 onchange="toggleInputFields('enableInput','small')" />
                                         </div>
-                                        <div class="col-sm  d-flex justify-content-">
-                                            <label for="small">Small:</label><br>
+                                        <div class="col-sm  d-flex justify-content-between ">
+                                            <label for="small">Small:</label>
                                             <input type="number" name="small" id="small" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
@@ -93,56 +77,56 @@
 
                                     </div>
 
-                                    <div class="row enablemedium" style="max-width: 300px;">
-                                        <div class="col-6 ">
+                                    <div class="row mt-2 enablemedium" style="max-width: 350px;">
+                                        <div class="col-sm ">
                                             <label>Medium :</label>
                                             <input type="checkbox" name="size[]" value="medium" id="enablemedium"
                                                 onchange="toggleInputFields('enablemedium','medium')" />
                                         </div>
-                                        <div class="col-6 d-flex justify-content-">
-                                            <label for="medium">Medium:</label><br>
+                                        <div class="col-6 d-flex justify-content-between ">
+                                            <label for="medium">Medium:</label>
                                             <input type="number" name="medium" id="medium" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
                                     </div>
 
-                                    <div class="row enablelarge" style="max-width: 300px;">
-                                        <div class="col-6 ">
+                                    <div class="row mt-2 enablelarge" style="max-width: 350px;">
+                                        <div class="col-sm ">
                                             <label>Large :</label>
                                             <input type="checkbox" name="size[]" value="large" id="enablelarge"
                                                 onchange="toggleInputFields('enablelarge','large')" />
                                         </div>
-                                        <div class="col-6 d-flex justify-content-">
-                                            <label for="large">Large:</label><br>
+                                        <div class="col-6 d-flex justify-content-between ">
+                                            <label for="large">Large:</label>
                                             <input type="number" name="large" id="large" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
                                     </div>
 
-                                    <div class="row enableXL" style="max-width: 300px;">
-                                        <div class="col-6 ">
+                                    <div class="row mt-2 enableXL" style="max-width: 350px;">
+                                        <div class="col-sm ">
                                             <label>XL :</label>
                                             <input type="checkbox" name="size[]" value="xl" id="enableXL"
                                                 onchange="toggleInputFields('enableXL','xl')" />
                                         </div>
-                                        <div class="col-6 d-flex justify-content-">
-                                            <label for="xl">XL:</label><br>
+                                        <div class="col-6 d-flex justify-content-between ">
+                                            <label for="xl">XL:</label>
                                             <input type="number" name="xl" id="xl" class="form-control"
                                                 style="width: 100px;"oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
                                     </div>
 
-                                    <div class="row enableXXL" style="max-width: 300px;">
-                                        <div class="col-6 ">
+                                    <div class="row mt-2 enableXXL" style="max-width: 350px;">
+                                        <div class="col-sm ">
                                             <label>XXL :</label>
                                             <input type="checkbox" name="size[]" value="xxl" id="enableXXL"
                                                 onchange="toggleInputFields('enableXXL','xxl')" />
                                         </div>
-                                        <div class="col-6 d-flex justify-content-">
-                                            <label for="xxl">XXL:</label><br>
+                                        <div class="col-6 d-flex justify-content-between ">
+                                            <label for="xxl">XXL:</label>
                                             <input type="number" name="xxl" id="xxl" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
@@ -151,13 +135,14 @@
                                 </div>
                                 <div class="container-fluid col-6 color">
                                     <div class="row">
-                                        <label>Color
+                                        <label>Màu sắc
                                         </label>
                                         <input type="text" id="inputColor" name="inputColor" class="form-control" />
                                         @error('color')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
-                                        <button type="button" onclick="addcolor();">add color</button>
+                                        <button class="btn btn-primary mt-2" type="button" onclick="addcolor();">Thêm
+                                            màu</button>
                                     </div>
                                 </div>
                             </div>
@@ -167,35 +152,9 @@
                         </div>
                     </div>
 
-
-                    {{-- category --}}
-                    <div class="row">
-                        <div class="col-md-6">
-
-                        </div>
-
-                        {{-- <div class="col-md mb-3">
-                            <label>Color
-                            </label>
-                            <input type="text" name="inputcolor" class="form-control" />
-                            @error('color')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div> --}}
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Image</label>
-                            <input type="file" name="image[]" multiple class="form-control" />
-                            @error('image')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md mb-3">
-                            <label>Description
+                            <label>Mô tả sản phẩm
                             </label>
                             <textarea style="height:90px; width:543px" name="description" class="form-control"></textarea>
                             @error('description')
@@ -205,13 +164,10 @@
 
                     </div>
                     <div class="col-md-12 mb-3">
-                        <button type="submit" class="btn btn-primary text-white float-end">Save</button>
+                        <button type="submit" class="btn btn-primary text-white float-end">Tạo mới</button>
                     </div>
-
                 </form>
-
             </div>
-
         </div>
     </div>
     <script>

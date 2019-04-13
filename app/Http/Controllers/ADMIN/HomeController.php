@@ -8,19 +8,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
-{
-
-    public function login(){
-        return view('admin.components.login');
-    }
-    
+{    
     public function AdminLogin(Request $request){
         $data = $request->all();
         // dd($data);
         if (Auth::attempt(['name'=>$data['userName'],'password'=>$data['password']])) {
             // $request->session()->regenerate();
-            session()->push('admin', 'value');
-            return redirect()->route('dashboard');
+           if(Auth::user()->role == 'admin'){
+               return redirect()->route('dashboard');
+           }
+           else{
+            toastr()->error('Bạn không có quyền');
+           }
         }
         
         return back()->withErrors(['Sai'=>'Tài khoản hoặc mật khẩu không đúng']);

@@ -54,6 +54,11 @@
             letter-spacing: 1.3px;
             padding-left: 10px;
             color: #555;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 10px 0;
         }
 
         .wrapper .form-field input {
@@ -83,7 +88,7 @@
             box-shadow: none;
             width: 100%;
             height: 40px;
-            background-color: #03A9F4;
+            background-color: #f379a7;
             color: #fff;
             border-radius: 25px;
             box-shadow: 3px 3px 3px #b1b1b1,
@@ -92,7 +97,8 @@
         }
 
         .wrapper .btn:hover {
-            background-color: #039BE5;
+            background-color: #3E444A;
+            border-color: #3E444A;
         }
 
         .wrapper a {
@@ -115,15 +121,16 @@
 </head>
 
 <body>
+
+
     <div class="wrapper">
         <div class="logo">
-            <img src="https://www.freepnglogos.com/uploads/twitter-logo-png/twitter-bird-symbols-png-logo-0.png"
-                alt="">
+            <img src="{{ asset('assets/imgs/logo.jpg') }}" alt="">
         </div>
-        <div class="text-center mt-4 name">
+        <div class=" name  ">
             Quế Anh SHOP
         </div>
-        <form class="p-3 mt-3" method="POST" action="{{ route('admin.login') }}">
+        <form class="p-3 mt-3" method="POST" action="/login">
             @csrf
             <div>
                 @if ($errors->any())
@@ -136,16 +143,26 @@
             </div>
             <div class="form-field d-flex align-items-center">
                 <span class="far fa-user"></span>
-                <input type="text" name="userName" id="userName" placeholder="Username" autocomplete="off">
+                <input type="text" name="username" id="username" placeholder="Username" autocomplete="off">
             </div>
+            @error('username')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-key"></span>
                 <input type="password" name="password" id="pwd" placeholder="Password" autocomplete="off">
             </div>
-            <button class="btn mt-3" type="submit">Đăng nhập</button>
+            @error('password')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
+            <button class="btn mt-3 " type="submit">Đăng nhập</button>
         </form>
+        <div class="text-center fs-6 mt-1">
+            <a href="#">Quên mật khẩu</a> hoặc <a href="#">Đăng ký</a>
+        </div>
         <div id="toast-container" class="toast-top-right"></div>
     </div>
+
 </body>
 
 </html>
