@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ADMIN;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -15,15 +16,18 @@ class HomeController extends Controller
     
     public function AdminLogin(Request $request){
         $data = $request->all();
-        $result = DB::table('users')
-                  ->where('email','=',$data['userName'])
-                  ->where('password','=',$data['password'])
-                  ->first();
-        if($result!=null){
+        // dd($data);
+        if (Auth::attempt(['name'=>$data['userName'],'password'=>$data['password']])) {
+            // $request->session()->regenerate();
             session()->push('admin', 'value');
             return redirect()->route('dashboard');
         }
+        
         return back()->withErrors(['Sai'=>'Tài khoản hoặc mật khẩu không đúng']);
+    }
+    public function logout(){
+        session()->forget('admin');
+        return  redirect('login');
     }
     public function dashboard(){
         return view('admin.components.dashboard');
@@ -37,7 +41,6 @@ class HomeController extends Controller
                 // Thêm đường dẫn của ảnh vào mảng
                 $images[] = '/uploads/' . $imageName;
             }
-            dd($images);
             $jsonImages = json_encode($images);
             dd($jsonImages);
         }

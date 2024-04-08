@@ -13,19 +13,19 @@ return new class extends Migration
     {
          Schema::create('Products', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('category_id');
             $table->string('name');
-            $table->string('desciption');
+            $table->string('description');
             $table->double('price');
             $table->integer('stock');
-            $table->string('defaultImage');
-            $table->json('listImage');
-            $table->boolean('status')->nullable()->default(false);
+            // $table->string('defaultImage');
+            // $table->json('listImage');
+            $table->boolean('status')->default(false);
             $table->dateTime('create_at');
-            $table->dateTime('create_by');
-            $table->dateTime('update_at');
-            $table->dateTime('update_by');
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('Categoies')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('create_by');
+            $table->dateTime('update_at')->nullable();
+            $table->string('update_by')->nullable();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

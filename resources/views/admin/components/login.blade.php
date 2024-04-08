@@ -126,11 +126,11 @@
         </div>
         <div class="form-field d-flex align-items-center">
             <span class="far fa-user"></span>
-            <input type="text" name="userName" id="userName" placeholder="Username">
+            <input type="text" name="userName" id="userName" placeholder="Username" autocomplete="off">
         </div>
         <div class="form-field d-flex align-items-center">
             <span class="fas fa-key"></span>
-            <input type="password" name="password" id="pwd" placeholder="Password">
+            <input type="password" name="password" id="pwd" placeholder="Password" autocomplete="off">
         </div>
         <button class="btn mt-3" type="submit">Login</button>
     </form>

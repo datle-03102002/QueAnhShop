@@ -10,12 +10,13 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
     <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="css/style.css"> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/feather.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/flag-icon.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/flag-icon.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/vendor.bundle.base.css') }}">
+    @yield('head')
+
 </head>
 
 <body>
@@ -28,7 +29,8 @@
                 </a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <button class="navbar-toggler navbar-toggler align-self-center btn-menu" type="button"
+                    data-toggle="minimize">
                     <span class="icon-menu"></span>
                 </button>
                 <ul class="navbar-nav mr-lg-2">
@@ -58,7 +60,7 @@
                             <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                    <img src="images/faces/face4.jpg" alt="image" class="profile-pic">
+                                    <img src="" alt="image" class="profile-pic">
                                 </div>
                                 <div class="preview-item-content flex-grow">
                                     <h6 class="preview-subject ellipsis font-weight-normal">David Grey
@@ -70,7 +72,7 @@
                             </a>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                    <img src="images/faces/face2.jpg" alt="image" class="profile-pic">
+                                    <img src="" alt="image" class="profile-pic">
                                 </div>
                                 <div class="preview-item-content flex-grow">
                                     <h6 class="preview-subject ellipsis font-weight-normal">Tim Cook
@@ -82,7 +84,7 @@
                             </a>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                    <img src="images/faces/face3.jpg" alt="image" class="profile-pic">
+                                    <img src="" alt="image" class="profile-pic">
                                 </div>
                                 <div class="preview-item-content flex-grow">
                                     <h6 class="preview-subject ellipsis font-weight-normal"> Johnson
@@ -96,7 +98,7 @@
                     </li>
                     <li class="nav-item dropdown d-flex mr-4 ">
                         <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center"
-                            id="notificationDropdown" href="#" data-toggle="dropdown">
+                            id="notificationDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="icon-cog"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
@@ -105,7 +107,7 @@
                             <a class="dropdown-item preview-item">
                                 <i class="icon-head"></i> Profile
                             </a>
-                            <a class="dropdown-item preview-item">
+                            <a href="{{ route('admin.logout') }}" class="dropdown-item preview-item">
                                 <i class="icon-inbox"></i> Logout
                             </a>
                         </div>
@@ -127,7 +129,7 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <div class="user-profile">
                     <div class="user-image">
-                        <img src="images/faces/face28.png">
+                        <img src="">
                     </div>
                     <div class="user-name">
                         Edward Spencer
@@ -144,10 +146,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
-                            aria-controls="ui-basic">
+                        <a class="nav-link" data-toggle="collapse" href="{{ route('category.index') }}"
+                            aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-disc menu-icon"></i>
-                            <span class="menu-title">UI Elements</span>
+                            <span class="menu-title">Category</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <div class="collapse" id="ui-basic">
@@ -160,15 +162,15 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/forms/basic_elements.html">
+                        <a class="nav-link" href="{{ route('product.index') }}">
                             <i class="icon-file menu-icon"></i>
-                            <span class="menu-title">Form elements</span>
+                            <span class="menu-title">Product</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="pages/charts/chartjs.html">
                             <i class="icon-pie-graph menu-icon"></i>
-                            <span class="menu-title">Charts</span>
+                            <span class="menu-title">Order</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -213,6 +215,9 @@
                     </li>
                 </ul>
             </nav>
+            <main class="container ">
+                @yield('content')
+            </main>
         </div>
     </div>
 
@@ -426,3 +431,16 @@
         </div> --}}
 
 </html>
+<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+
+{{-- <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script> --}}
+<script src="{{ asset('assets/js/template.js') }}"></script>
+{{-- <script>
+    $(document).ready(function() {
+        $(".btn-menu").click(function() {
+            $("body").toggleClass("sidebar-icon-only")
+        })
+    });
+</script> --}}
+@yield('script')

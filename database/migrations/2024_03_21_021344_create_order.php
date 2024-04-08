@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->integer('code');
             $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('status_id');
             $table->string('name');
             $table->string('address');
             $table->string('phoneNumber');
             $table->string('totalAmount');
-            $table->unsignedBigInteger('status_id');
             $table->string('paymentMethod');
             $table->string('cancelReson')->nullable();
             $table->boolean('isCancel')->default(false);
