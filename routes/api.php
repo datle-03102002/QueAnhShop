@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\Homecontroller;
+use App\Http\Controllers\Client\AuthController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,3 +20,5 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('sizeandcolor/{id}',[Homecontroller::class, 'getSizeAndColor']);
+// Route::get('/getaddress',[AuthController::class,'getAddress']);
+

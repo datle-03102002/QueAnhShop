@@ -1,4 +1,60 @@
 @extends('client.layout')
+@section('banner')
+    <div class="banner-main">
+        <div class="slider-area position-relative ">
+            <div class="swiper-container slider-active">
+                <div class="swiper-wrapper">
+                    <!--Single Slider Start-->
+                    <div class="single-slider swiper-slide animation-style-01"
+                        style="background-image: url('{{ asset('assets/imgs/KIDOLBanner.png') }}');">
+                        <div class="container">
+                            <div class="slider-content">
+                                <h5 class="sub-title">Nhập: <span class="text-primary">SALE100K</span> <br> Giảm
+                                    100K
+                                    cho mọi đơn hàng</h5>
+                                <h2 class="main-title">Ngày đặc biệt!</h2>
+                                <p>Nhập: <span class="text-primary">SALE10</span> để được giảm 10%, số lượng có
+                                    hạn!
+                                </p>
+
+                                <ul class="slider-btn">
+                                    <li><a href="http://kidolshop.click/store" class="btn btn-round btn-primary">Bắt
+                                            đầu mua sắm</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Single Slider End-->
+
+                    <!--Single Slider Start-->
+                    <div class="single-slider swiper-slide animation-style-01"
+                        style="background-image: url('{{ asset('assets/imgs/KIDOLBanner2.png') }}');">
+                        <div class="container" style="text-align:right;">
+                            <div class="slider-content">
+                                <h5 class="sub-title sub-title-right">Nhập: <span class="text-info">SALE100K</span>
+                                    <br> Giảm 100K cho mọi đơn hàng
+                                </h5>
+                                <h2 class="main-title">Ngày đặc biệt!</h2>
+                                <p>Nhập: <span class="text-info">SALE10</span> để được giảm 10%, số lượng có hạn!
+                                </p>
+
+                                <ul class="slider-btn">
+                                    <li><a href="http://kidolshop.click/store" class="btn btn-round btn-primary">Bắt
+                                            đầu mua sắm</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" swiper-next"><i class="fa fa-angle-right"></i></div>
+                <div class=" swiper-prev"><i class="fa fa-angle-left"></i></div>
+
+                <div class="swiper-pagination"></div>
+
+            </div>
+        </div>
+    </div>
+@endsection
 @section('content')
     {{-- shipping area --}}
     <div class="shipping-area  " style="padding: 90px;">
@@ -127,8 +183,8 @@
         </div>
         <div role="tabpanel" class="mt-4">
             <!-- List group -->
-            <div class="list-group d-flex container flex-row justify-content-center" style="min-width:450px;" id="myList"
-                role="tablist">
+            <div class="list-group d-flex container flex-row justify-content-center" style="min-width:450px;"
+                id="myList" role="tablist">
                 <a class="list-group-item title list-group-item-action active" style="border:none;" data-bs-toggle="list"
                     href="#banchay" role="tab">Bán chạy</a>
                 <a class="list-group-item title list-group-item-action" style="border:none;" data-bs-toggle="list"
@@ -169,7 +225,9 @@
                                                     {{ $item->name }}
                                                 </h4>
                                                 <div class="price-box">
-                                                    <span class="current-price">{{ $item->price }}</span>
+                                                    <span
+                                                        class="current-price">{{ number_format($item->price, 0, ',', '.') }}
+                                                        đ</span>
                                                 </div>
                                             </div>
                                         </div>

@@ -23,6 +23,10 @@ class Product extends Model
     {
         return $this->hasMany(Images::class);
     }
+    public function cart()
+    {
+        return $this->belongsToMany(Cart::class)->withPivot('size');
+    }
     
     
 }

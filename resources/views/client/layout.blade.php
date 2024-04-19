@@ -10,9 +10,6 @@
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/header.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/products.css') }}">
-    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     @yield('style')
@@ -24,6 +21,7 @@
 </head>
 
 <body>
+    @csrf
     <div class="main-wrapper">
         <div class="header-section d-lg-block p-0">
             <div class="main-header">
@@ -96,8 +94,9 @@
                                             </a>
                                         @else
                                             <div class="dropdown">
-                                                <button class="btn noborder dropdown-toggle text-primary" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button class="btn  noborder dropdown-toggle text-primary"
+                                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa fa-user" aria-hidden="true"></i>
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li><a class="dropdown-item" href="">Hồ
@@ -111,7 +110,9 @@
                                         @endif
                                     </div>
                                     <div class="cart-block">
-                                        <i class="fa-solid fa-cart-shopping w-100 fs-4"></i>
+                                        <a href="{{ route('giohang') }}">
+                                            <i class="fa-solid fa-cart-shopping w-100 fs-4"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -120,69 +121,14 @@
                 </div>
             </div>
         </div>
-        <div class="banner-main">
-            <div class="slider-area position-relative ">
-                <div class="swiper-container slider-active">
-                    <div class="swiper-wrapper">
-                        <!--Single Slider Start-->
-                        <div class="single-slider swiper-slide animation-style-01"
-                            style="background-image: url('{{ asset('assets/imgs/KIDOLBanner.png') }}');">
-                            <div class="container">
-                                <div class="slider-content">
-                                    <h5 class="sub-title">Nhập: <span class="text-primary">SALE100K</span> <br> Giảm
-                                        100K
-                                        cho mọi đơn hàng</h5>
-                                    <h2 class="main-title">Ngày đặc biệt!</h2>
-                                    <p>Nhập: <span class="text-primary">SALE10</span> để được giảm 10%, số lượng có
-                                        hạn!
-                                    </p>
-
-                                    <ul class="slider-btn">
-                                        <li><a href="http://kidolshop.click/store"
-                                                class="btn btn-round btn-primary">Bắt
-                                                đầu mua sắm</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!--Single Slider End-->
-
-                        <!--Single Slider Start-->
-                        <div class="single-slider swiper-slide animation-style-01"
-                            style="background-image: url('{{ asset('assets/imgs/KIDOLBanner2.png') }}');">
-                            <div class="container" style="text-align:right;">
-                                <div class="slider-content">
-                                    <h5 class="sub-title sub-title-right">Nhập: <span
-                                            class="text-info">SALE100K</span>
-                                        <br> Giảm 100K cho mọi đơn hàng
-                                    </h5>
-                                    <h2 class="main-title">Ngày đặc biệt!</h2>
-                                    <p>Nhập: <span class="text-info">SALE10</span> để được giảm 10%, số lượng có hạn!
-                                    </p>
-
-                                    <ul class="slider-btn">
-                                        <li><a href="http://kidolshop.click/store"
-                                                class="btn btn-round btn-primary">Bắt
-                                                đầu mua sắm</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class=" swiper-next"><i class="fa fa-angle-right"></i></div>
-                    <div class=" swiper-prev"><i class="fa fa-angle-left"></i></div>
-
-                    <div class="swiper-pagination"></div>
-
-                </div>
-            </div>
-        </div>
+        @yield('banner')
         @yield('content')
     </div>
-    <div class="model">
+    <div class="model  ">
         <div class="model-content">
 
         </div>
+
     </div>
 </body>
 
@@ -192,10 +138,10 @@
 </script> --}}
 {{-- <script src="{{ asset('assets/vendor/purecounter/purecounter_vanilla.js') }}"></script> --}}
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script> --}}
 <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -254,12 +200,10 @@
             clickable: true,
         },
     });
-    var swiper = new Swiper(".mySwiper", {
-        watchSlidesProgress: true,
-        slidesPerView: 3,
-    });
-</script>
-<script>
+    // var swiper = new Swiper(".mySwiper", {
+    //     watchSlidesProgress: true,
+    //     slidesPerView: 3,
+    // });
     let arrayQuantity = [];
 
     function addToCart(id, event) {
@@ -276,9 +220,11 @@
                     arraySize.add(item['size']);
                     arrayColor.add(item['color']);
                 });
-                let html = '';
+                let html = `<span class="exit" onclick="closeModel()">
+                                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                            </span>`;
 
-                html += `
+                html += `<div>Màu sắc: </div>
                         <div class="box-color">`
                 Array.from(arrayColor).forEach((item, index) => {
                     if (index == 0) {
@@ -293,7 +239,9 @@
                             </div>`
                     }
                 })
-                html += `</div><div class="box-size">`
+                html += `</div>
+                         <div>Kích thước:</div>   
+                            <div class="box-size">`
                 // console.log(typeof arrayColor);
                 Array.from(arraySize).forEach((item, index) => {
                     // console.log(index);
@@ -322,12 +270,14 @@
                                 Còn lại: <span>${item['quantity']}</span></div>`;
                     }
                 })
-                html += `<div class="box-quantity">
+                html += `
+                        <div class="box-quantity">
+                            <span>Số lượng: </span>
                             <i onclick="updateQuantityModal('giam')" class="fa fa-minus-square" aria-hidden="true"></i>
-                            <input type="number" step="1" min="1" value="1">  
+                            <input type="number" step="1" min="1" value="1" class='quantity' oninput="validity.valid||(value='1');">  
                             <i onclick="updateQuantityModal('tang')" class="fa fa-plus-square" aria-hidden="true"></i>  
                         </div>
-                        <div><button class="btn btn-primary btn-add-to-cart">
+                        <div><button class="btn btn-primary mt-2"  onclick="btnAddToCart(${id})">
                                 Thêm giỏ hàng
                             </button>
                             </div>`;
@@ -337,19 +287,19 @@
             });
     }
 
-    function checkquantity() {
-        let quantity = document.querySelector(".stock>span").textContent;
-
+    function closeModel() {
+        document.querySelector(".model").classList.remove('active')
+        document.querySelector(".model-content").innerHTML = '';
     }
+
+
 
     function toggleSizeAndColor() {
         let size;
         let color;
-        console.log($('input[name="size"]'));
-        console.log($('input[name="color"]'));
         $('input[name="size"]').each(function() {
             if ($(this).is(':checked') == true) {
-                console.log("a");
+                // console.log("a");
                 size = $(this).data('size');
 
             }
@@ -367,21 +317,87 @@
                 $(this).removeClass('active');
             }
         })
+        $('.quantity').val(1);
     }
 
+    function btnAddToCart(id) {
+        const Authlogin = {!! json_encode(Auth::check()) !!};
+        if (Authlogin) {
+            let quantityStock = document.querySelector(".quantity-item>span").textContent;
+            let quantity = $(".quantity").val();
+            if (quantity <= quantityStock) {
+                let size;
+                let color;
+                $('input[name="size"]').each(function() {
+                    if ($(this).is(':checked') == true) {
+                        // console.log("a");
+                        size = $(this).data('size');
+
+                    }
+                });
+                $('input[name="color"]').each(function() {
+                    if ($(this).is(':checked') == true) {
+                        color = $(this).data('color');
+                    }
+                });
+                const token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: '/addToCart',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    },
+                    data: {
+                        token: token,
+                        quantity: quantity,
+                        size: size,
+                        color: color,
+                        id: id
+                    },
+                    success: function(data) {
+                        const model = document.querySelector(".model")
+                        model.classList.remove('active')
+                        model.querySelector('.model-content').innerHTML = '';
+                        if (data.status == true) {
+                            swal('Thông báo', data.message, 'success');
+                        } else {
+                            swal('Thông báo', data.message, 'error');
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+
+                })
+            } else {
+                alert('Số lượng mua lớn hơn số lượng trong kho');
+            }
+        } else {
+            window.location.href = `http://127.0.0.1:8000/login`;
+        }
+
+        // console.log(id);
+    }
     // them gio hang
-    $(".btn-add-to-cart").click(function() {
-        let quantity = document.querySelector(".stock>span").textContent
-        console.log(quantity);
-    })
 
     function updateQuantityModal(action) {
         // console.log(arrayQuantity);
-        let quantity = document.querySelector(".stock>span").textContent;
-        console.log(quantity);
-        let inputQuantity
+        let quantityStock = document.querySelector(".quantity-item.active>span").textContent;
+        // console.log(quantityStock);
+        let inputQuantity = $('.quantity');
+        let currentQuantity = parseInt(inputQuantity.val());
         if (action == 'giam') {
-
+            if (currentQuantity > 1) {
+                inputQuantity.val(currentQuantity - 1);
+            } else {
+                inputQuantity.val(1);
+            }
+        } else {
+            if (currentQuantity < quantityStock) {
+                inputQuantity.val(currentQuantity + 1);
+            } else {
+                inputQuantity.val(quantityStock);
+            }
         }
     }
 </script>

@@ -7,6 +7,8 @@ use App\Http\Controllers\ADMIN\CategoryController as AdminCategoryController;
 
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\AuthController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,24 @@ Route::get('/logout', [AuthController::class,'logout'])->name('logout');
 Route::get('/cuahang', [ClientHomeController::class,'cuahang'])->name('cuahang');
 Route::get('/chitiet/{name}', [ClientHomeController::class,'chitietsanpham'])->name('chitietsanpham');
 Route::get('/cuahang', [ClientHomeController::class,'locsanpham'])->name('locsanpham');
+Route::middleware('api')->get('/getaddress', [AuthController::class,'getAddress']);
+// Route::get('/getaddress',);
+
+
+
+
+
+// Cart
+
+Route::post('/addToCart', [CartController::class,'addToCart']);
+Route::get('/giohang',[CartController::class,'index'])->name('giohang');
+Route::post('/deleteCartItem',[CartController::class, 'deleteCartItem']);
+
+// Order 
+Route::get('/thanhtoan',[OrderController::class, 'index'])->name('thanhtoan');
+Route::get('/responseVNPAY',[OrderController::class, 'responseVNPAY'])->name('responseVNPAY');
+Route::post('/checkout',[OrderController::class, 'checkout'])->name('checkout');
+
 
 
 

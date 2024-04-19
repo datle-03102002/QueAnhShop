@@ -68,6 +68,7 @@ class Homecontroller extends Controller
     }
     public function getSizeAndColor($id){
         // dd($id);
+        dd(Auth::id());
         $productDetail = ProductDetail::where('product_id',$id)->get();
         // dd($productDetail);
         return  response()->json([

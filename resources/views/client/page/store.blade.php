@@ -50,8 +50,7 @@
                             <div class="col-sm-4 ">
                                 <div class="single-product" style="">
                                     <div class="product-image">
-                                        <a
-                                            href="{{ route('chitietsanpham', ['name' => \Illuminate\Support\Str::slug($item->name, '-')]) }}">
+                                        <a href="{{ route('chitietsanpham', ['name' => $item->slug]) }}">
                                             <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}"
                                                 alt="">
                                         </a>
@@ -59,7 +58,7 @@
                                             <ul>
                                                 <li>
                                                     <a class="product-detail"
-                                                        href="{{ route('chitietsanpham', ['name' => \Illuminate\Support\Str::slug($item->name, '-')]) }}"><i
+                                                        href="{{ route('chitietsanpham', ['name' => $item->slug]) }}"><i
                                                             class="fa fa-eye" aria-hidden="true"></i></a>
                                                 </li>
                                                 <li>
@@ -78,7 +77,9 @@
                                             </a>
                                         </h4>
                                         <div class="price-box text-center ">
-                                            <span class="current-price">{{ $item->price }}</span>
+
+                                            <span class="current-price">{{ number_format($item->price, 0, ',', '.') }}
+                                                đ</span>
                                         </div>
                                     </div>
                                 </div>

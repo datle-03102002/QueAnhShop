@@ -10326,7 +10326,7 @@ input[type=checkbox] {
 }
 
 .model .model-content {
-   height: 200px;
+   height: auto;
    width: 400px;
    text-align: center;
    background-color: white;
@@ -10335,6 +10335,44 @@ input[type=checkbox] {
    display: flex;
    flex-direction: column;
    justify-content: center;
+   padding: 20px;
+   border-radius: 20px;
+   position: relative;
+   animation: showmodel 0.3s ease-in-out;
+   /* animation-iteration-count: infinite; */
+}
+
+@keyframes showmodel {
+   0% {
+      scale: 0;
+
+   }
+
+   25% {
+      scale: 0.25;
+   }
+
+   50% {
+      scale: 0.5;
+   }
+
+   75% {
+      scale: 0.75;
+   }
+
+   100% {
+      scale: 1;
+   }
+}
+
+
+.model .model-content .exit {
+   position: absolute;
+   top: 0;
+   right: 10px;
+   z-index: 999;
+   font-size: 20px;
+   cursor: pointer;
 }
 
 .model .model-content .box-size,
@@ -10358,6 +10396,7 @@ input[type=checkbox] {
    height: 40px;
    text-align: center;
    padding: 10px;
+   background-color: #f7f8fa;
 }
 
 .model .model-content .quantity-item {
@@ -10375,7 +10414,9 @@ input[type=checkbox] {
 }
 
 .model .model-content .box-quantity input[type=number] {
-   width: unset;
+   width: 20px;
+   border: none;
+   outline: none;
    max-width: unset;
    height: 40px;
    text-align: center;
@@ -10387,17 +10428,3 @@ input[type=checkbox] {
    cursor: pointer;
    /* height: 40px */
 }
-
-/* 
-.model .model-content .box-quantity i::before {
-   display: inline-block;
-   height: 100% !important;
-   overflow: unset;
-   /* Thiết lập chiều cao cho biểu tượng bên trong phần tử <i> */
-/* } */
-
-/* */
-
-/* .model .model-content .box-quantity .fa.fa-minus-square {
-   position: absolute;
-} */
