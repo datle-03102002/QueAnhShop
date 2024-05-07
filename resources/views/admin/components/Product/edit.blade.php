@@ -1,5 +1,31 @@
 @extends('admin.components.dashboard')
+@section('style')
+    <style>
+        .ck.ck-reset.ck-editor.ck-rounded-corners {
+            width: 100%;
+            height: auto;
+            /* min-height: 500px; */
+        }
 
+        .ck.ck-content {
+            min-height: 200px;
+        }
+
+        .image-item {
+            position: relative;
+            border: 1px solid black;
+            margin: 0 5px;
+        }
+
+        .image-item .deleteImage {
+            position: absolute;
+            top: 0;
+            right: 1%;
+
+            cursor: pointer;
+        }
+    </style>
+@endsection
 @section('content')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -9,10 +35,12 @@
     </style>
     <div class="row">
         <div class="col-md-12 ">
-            <div class="card-header bg-transparent border-0 ">
+            <div class="card-header  d-flex justify-content-between ">
                 <h4>
-                    <a href="{{ route('product.index') }}" class="btn btn-primary btn-sm float-right">Back</a>
+                    Sửa sản phẩm
+
                 </h4>
+                <a href="{{ route('product.index') }}" class="btn btn-primary btn-sm ">Quay lại</a>
             </div>
             <div class="card-body container ">
                 <form action="{{ route('product.update', ['product' => $product->id]) }}" method="POST"
@@ -50,10 +78,10 @@
 
                     <div class="row">
                         <div class="col-6">
-                            <label>Số lượng
+                            <label>Tổng số lượng sản phẩm
                             </label><br>
                             <input type="number" name="quantity" id="quantity" class="form-control" min="1"
-                                step="1" value="{{ $product->stock }}" />
+                                step="1" value="{{ $product->stock }}" readonly />
                             @error('quantity')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -72,88 +100,63 @@
 
                     <div class="row">
                         <div class="container ">
-                            <div class="row">
-                                <div class="container-fluid col-6">
-                                    <label>Available Sizes: Small, Medium, Large, XL, XXL</label>
-                                    <table class="table text-center table-bordered ">
-                                        <tr>
-                                            <th>Kích thước</th>
-                                            <th>Màu sắc</th>
-                                            <th>Số lượng trong kho</th>
-                                            <th>Thao tác</th>
-                                        </tr>
-                                        @foreach ($product->productDetail as $key => $item)
-                                            <tr>
-                                                <td>{{ $item->size }}
-                                                </td>
-                                                <td>{{ $item->color }}</td>
-                                                <td class="single-quantity">{{ $item->quantity }}</td>
-                                                <td>
-                                                    <button class="edit" data-id="{{ $item->id }}" type="button"
-                                                        onclick="editRow(this)">Sửa</button>
-                                                    <button type="button"
-                                                        onclick="deleteItem('{{ $item->id }}',this)">Xóa</button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </table>
-                                </div>
-                                {{-- <div class="container-fluid col-6 color">
-                                    <div class="row">
-                                        @php
-                                            $displayedColors = [];
-                                        @endphp
-                                        @foreach ($product->productDetail as $key => $item)
-                                            @if (!in_array($item->color, $displayedColors))
-                                                @php
-                                                    $displayedColors[] = $item->color; // Thêm kích thước vào mảng đã hiển thị
-                                                @endphp
-                                                <div class="row">
-                                                    <input type="text" class="form-control" name="color[]" readonly
-                                                        value="{{ $item->color }}">
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <label>Màu sắc
-                                                </label>
-                                                <input type="text" id="inputColor" name="inputColor"
-                                                    class="form-control" />
-                                            </div>
-                                            <div class="col-6">
-                                                <label for="">Số lượng</label>
-                                                <input type="text" id="inputNewQuantity" name="inputNewQuantity"
-                                                    class="form-control" />
-                                            </div>
-                                        </div>
-                                        <button type="button" onclick="addcolor();">Thêm màu</button>
-                                    </div>
-                                </div> --}}
-                            </div>
+
+
+                            <label>Kích thước: S, M, L, XL, XXL</label>
+                            <table class="table text-center table-bordered ">
+                                <tr>
+                                    <th>Kích thước</th>
+                                    <th>Màu sắc</th>
+                                    <th>Số lượng trong kho</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                @foreach ($product->productDetail as $key => $item)
+                                    <tr>
+                                        <td>{{ $item->size }}
+                                        </td>
+                                        <td>{{ $item->color }}</td>
+                                        <td class="single-quantity">{{ $item->quantity }}</td>
+                                        <td class="">
+                                            <button class="edit btn btn-sm btn-secondary" data-id="{{ $item->id }}"
+                                                type="button" onclick="editRow(this)">Sửa</button>
+                                            <button type="button" onclick="deleteItem('{{ $item->id }}',this)"
+                                                class="btn btn-sm btn-primary ">Xóa</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+
+
+
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-3">
+                        <label for="">Hình ảnh hiện có: </label>
                         @foreach ($product->images as $item)
-                            <div class="col-3">
-                                <img src="{{ $item->url }}" alt="">
+                            <div class="col-2 image-item {{ $item->id }}">
+                                <img class="w-100 h-100 " src="{{ asset('assets/uploads/' . $item->url) }}" alt="">
+                                <span class="deleteImage"
+                                    onclick="deleteImage('{{ $item->id }}','{{ $product->id }}')">X</span>
                             </div>
                         @endforeach
-                        <div class="col-md-6 mb-3">
-                            <label>Image</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label>Thêm hình ảnh</label>
                             <input type="file" name="image[]" multiple class="form-control" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md mb-3">
-                            <label>Description
+                            <label>Mô tả
                             </label>
-                            <textarea style="max-height:90px; max-width:543px" name="description" class="form-control"></textarea>
+                            <textarea id="editor" style="max-height:90px; max-width:543px" id="description" name="description"
+                                class="form-control">{{ $product->description }}</textarea>
                         </div>
 
                     </div>
                     <div class="col-md-12 mb-3">
-                        <button type="submit" class="btn btn-primary text-white">Save</button>
+                        <button type="submit" class="btn btn-primary text-white">Lưu</button>
                     </div>
 
                 </form>
@@ -164,10 +167,35 @@
     </div>
 @endsection
 @section('script')
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
+        // CKEDITOR.replace('description');
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('upload', ['_token' => csrf_token()]) }}",
+                },
+                language: 'en',
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells',
+                        'tableCellProperties',
+                        'tableProperties'
+                    ]
+                },
+
+                // Thiết lập kích thước
+                width: '100%',
+                height: 'auto'
+            })
+            .catch(error => {
+                console.error(error);
+            });
         // $(document).ready(function() {
         const token = document.querySelector('input[name="_token"]').value;
         // console.log(token);
@@ -233,7 +261,7 @@
 
         function saveRow(button) {
             // console.log(token);
-            const ArraySize = ['small', 'mediun', 'large', 'xl', 'xxl'];
+            const ArraySize = ['S', 'M', 'L', 'XL', 'XXL'];
             var row = button.parentNode.parentNode;
             var inputs = row.querySelectorAll("td input");
             const id = $(button).data('id');
@@ -245,7 +273,7 @@
             data.color = inputs[1].value;
             data.quantity = inputs[2].value;
             if (!ArraySize.includes(data.size)) {
-                swal("Lỗi", "Kích thước có sẵn: small, medium, large, xl, xxl", "warning");
+                swal("Lỗi", "Kích thước có sẵn: S, M, L, XL, XXL", "warning");
                 return;
             }
             if (parseInt(data.quantity) < 0) {
@@ -283,20 +311,6 @@
 
         }
 
-        // function validateTotal() {
-        //     // Get values from the "Small," "Medium," "Large," "XL," and "XXL" input fields
-        //     var smallValue = parseInt(document.getElementById("small")?.value) || 0;
-        //     var mediumValue = parseInt(document.getElementById("medium")?.value) || 0;
-        //     var largeValue = parseInt(document.getElementById("large")?.value) || 0;
-        //     var xlValue = parseInt(document.getElementById("xl")?.value) || 0;
-        //     var xxlValue = parseInt(document.getElementById("xxl")?.value) || 0;
-
-        //     // Calculate the total
-        //     var total = smallValue + mediumValue + largeValue + xlValue + xxlValue;
-
-        //     // Update the "quantity" input field with the total value
-        //     document.getElementById("quantity").value = total;
-        // }
 
         function addcolor() {
             let rowColor = document.querySelectorAll(".color")[0];
@@ -330,6 +344,23 @@
                 Inputcolor.focus();
             }
 
+        }
+
+        function deleteImage(id, proId) {
+            $.ajax({
+                url: "{{ route('product.deleteImage') }}",
+                type: 'post',
+                data: {
+                    id: id,
+                    product_id: proId,
+                    _token: token
+                },
+                success: function(data) {
+                    if (data.code == 200) {
+                        $(`.image-item.${id}`).remove();
+                    }
+                }
+            })
         }
     </script>
 @endsection

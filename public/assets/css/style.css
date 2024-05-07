@@ -779,11 +779,24 @@ figure {
    line-height: 24px;
 }
 
-.btn-primary {
-   background-color: #f379a7;
-   border-color: #f379a7;
+.nav-item .btn-primary.active {
+   background-color: #f379a7 !important;
+   border-color: #f379a7 !important;
    color: #ffffff;
 }
+
+.nav-item .btn-primary {
+   background-color: #f7f7f7 !important;
+   border-color: #f379a7 !important;
+   color: #666666;
+}
+
+.btn-primary {
+   background-color: #f379a7 !important;
+   border-color: #f379a7 !important;
+   color: #ffffff;
+}
+
 
 .btn-primary:hover {
    background-color: #3E444A;
@@ -2387,7 +2400,7 @@ blockquote p {
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
    .site-main-nav .site-nav ul>li .mega-sub-menu {
-      width: 870px;
+      width: 100%;
    }
 }
 

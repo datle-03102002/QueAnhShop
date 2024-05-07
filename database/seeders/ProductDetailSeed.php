@@ -183,13 +183,13 @@ class ProductDetailSeed extends Seeder
         ]);DB::table('product_detail')->insert([
             'product_id' => '3',
             'color' => 'Nâu',
-            'size'=>'XL',
+            'size'=>'L',
             'quantity'=>'10',
             'created_at'=>Carbon::now(),
         ]);DB::table('product_detail')->insert([
             'product_id' => '3',
             'color' => 'Nâu',
-            'size'=>'XL',
+            'size'=>'M',
             'quantity'=>'10',
             'created_at'=>Carbon::now(),
         ]);
@@ -203,13 +203,13 @@ class ProductDetailSeed extends Seeder
         ]);DB::table('product_detail')->insert([
             'product_id' => '3',
             'color' => 'Đen',
-            'size'=>'XL',
+            'size'=>'L',
             'quantity'=>'10',
             'created_at'=>Carbon::now(),
         ]);DB::table('product_detail')->insert([
             'product_id' => '3',
             'color' => 'Đen',
-            'size'=>'XL',
+            'size'=>'M',
             'quantity'=>'20',
             'created_at'=>Carbon::now(),
         ]);
@@ -245,13 +245,13 @@ class ProductDetailSeed extends Seeder
         ]);DB::table('product_detail')->insert([
             'product_id' => '4',
             'color' => 'Nâu',
-            'size'=>'XL',
+            'size'=>'L',
             'quantity'=>'10',
             'created_at'=>Carbon::now(),
         ]);DB::table('product_detail')->insert([
             'product_id' => '4',
             'color' => 'Nâu',
-            'size'=>'XL',
+            'size'=>'M',
             'quantity'=>'10',
             'created_at'=>Carbon::now(),
         ]);
@@ -265,13 +265,13 @@ class ProductDetailSeed extends Seeder
         ]);DB::table('product_detail')->insert([
             'product_id' => '4',
             'color' => 'Hồng',
-            'size'=>'XL',
+            'size'=>'L',
             'quantity'=>'10',
             'created_at'=>Carbon::now(),
         ]);DB::table('product_detail')->insert([
             'product_id' => '4',
             'color' => 'Hồng',
-            'size'=>'XL',
+            'size'=>'M',
             'quantity'=>'20',
             'created_at'=>Carbon::now(),
         ]);

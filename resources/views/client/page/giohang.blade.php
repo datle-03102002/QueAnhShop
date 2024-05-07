@@ -35,7 +35,8 @@
                                     </a>
                                     <span>Mã sản phẩm: {{ $item->product->id }}</span>
                                     <span>Loại: {{ $item->color }}-{{ $item->size }}</span>
-                                    <span class="text-primary">Còn Lại: {{ $item->stock }}</span>
+                                    <span class="text-primary stock-{{ $item->id }}">Còn Lại:
+                                        <span>{{ $item->stock }}</span></span>
                                     {{-- <input type="hidden" class="Quantity" id="Quantity-56-Size8-9Y" value="42"> --}}
                                 </td>
                                 <td class="price">
@@ -43,11 +44,14 @@
                                 </td>
                                 <td class="quantity">
                                     <div class="quantity d-inline-flex align-items-center ">
-                                        <i class="fa fa-minus-square"></i>
-                                        <input type="number" class="QuantityBuy" id="QuantityBuy-56"
+                                        <i class="fa fa-minus-square"
+                                            onclick="handelChangeQuantity('tru',{{ $item->id }})"></i>
+                                        <input type="number" class="QuantityBuy" id="QuantityBuy-{{ $item->id }}"
                                             value="{{ $item->quantity }}" min="1"
-                                            oninput="validity.valid||(value='1');">
-                                        <i class="fa fa-plus-square"></i>
+                                            oninput="validity.valid||(value='1');"
+                                            onchange="handelChangeQuantity('change',{{ $item->id }})">
+                                        <i class="fa fa-plus-square"
+                                            onclick="handelChangeQuantity('cong',{{ $item->id }})"></i>
                                         <div class="alert-qty-input"><span class="message-qty-input">Mua tối đa
                                                 {{ $item->stock }} sản
                                                 phẩm!</span></div>
@@ -132,5 +136,32 @@
                 }
             })
         })
+
+        function handelChangeQuantity(action, id) {
+            console.log(id);
+
+            let quantity = $('#QuantityBuy-' + id);
+            let currentquantity = quantity.val()
+            let stock = $('span.stock-' + id + '>span').html();
+            // console.log(stock);
+            // console.log(quantity);
+            if (action == 'tru') {
+                if (quantity.val() != 1) {
+                    quantity.val(parseInt(currentquantity) - 1);
+                }
+            } else if (action == 'cong') {
+                if (currentquantity < parseInt(stock) - 1) {
+                    console.log('oke');
+                    quantity.val(parseInt(currentquantity) + 1);
+                }
+            } else {
+                if (currentquantity >= parseInt(stock)) {
+                    quantity.val(parseInt(stock));
+                }
+            }
+
+
+            // console.log(quantity.val());
+        }
     </script>
 @endsection

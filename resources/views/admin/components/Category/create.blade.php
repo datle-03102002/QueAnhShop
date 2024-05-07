@@ -1,19 +1,32 @@
 @extends('admin.components.dashboard')
-@section('head')
+@section('style')
+    <style>
+        .ck.ck-reset.ck-editor.ck-rounded-corners {
+            width: 100%;
+            height: auto;
+            /* min-height: 500px; */
+        }
+
+        .ck.ck-content {
+            min-height: 200px;
+        }
+    </style>
 @endsection
 @section('content')
-    <form action="{{ route('category.store') }}" method="post">
+    <form class="mt-3" action="{{ route('category.store') }}" method="post">
         @csrf
         <div class="row">
             <div class="form-group">
-                <input type="text" name="name">
+                <label for="name">Tên danh mục</label>
+                <input class="form-control" id="name" type="text" name="name">
             </div>
         </div>
         <div class="row">
-            <textarea class="ckeditor" id="editor" name="description" rows="10">
+            <label for="">Mô tả danh mục</label>
+            <textarea class="ckeditor" id="editor" name="description" rows="10" cols="50">
         </textarea>
         </div>
-        <button type="submit">ADD</button>
+        <button type="submit" class="btn btn-sm btn-primary mt-3">Thêm</button>
     </form>
 @endsection
 @section('script')
@@ -21,8 +34,31 @@
     <script>
         const a = document.querySelector('#editor');
         console.log(a);
+        // ClassicEditor
+        //     .create(document.querySelector('#editor'))
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
         ClassicEditor
-            .create(document.querySelector('#editor'))
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('upload', ['_token' => csrf_token()]) }}",
+                },
+                language: 'en',
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells',
+                        'tableCellProperties',
+                        'tableProperties'
+                    ]
+                },
+
+                // Thiết lập kích thước
+                width: '100%',
+                height: 'auto'
+            })
             .catch(error => {
                 console.error(error);
             });

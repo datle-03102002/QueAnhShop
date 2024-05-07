@@ -41,6 +41,69 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('home');
     }
+    public function addAddress(Request $request){
+        try {
+            $data = $request->only('name','address','phone');
+            $address = new Address();
+            $address->name = $data['name'];
+            $address->phone = $data['phone'];
+            $address->address = $data['address'];
+            $address->user_id = Auth::id();
+            $address->save();
+            return response()->json([
+                'status'=>true,
+                'message'=>'Thêm địa chỉ thành công'
+            ]);
+
+        } catch (\Throwable $th) {
+             return response()->json([
+                'status'=>false,
+                'message'=>'Có lỗi khi thêm địa chỉ',
+                'error'=>$th
+            ]);
+        }
+    }
+    public function updateAddress(Request $request){
+        try {
+
+            $data = $request->only('name','address','phone','id');
+            $address =  Address::find($data['id']);
+            $address->name = $data['name'];
+            $address->phone = $data['phone'];
+            $address->address = $data['address'];
+            $address->user_id = Auth::id();
+            $address->save();
+            return response()->json([
+                'status'=>true,
+                'message'=>'Sửa địa chỉ thành công'
+            ]);
+
+        } catch (\Throwable $th) {
+             return response()->json([
+                'status'=>false,
+                'message'=>'Có lỗi khi sửa địa chỉ',
+                'error'=>$th
+            ]);
+        }
+    }
+    public function removeAddress(Request $request){
+        $id = $request->id;
+        try {
+            $address = Address::find($id);
+            $address->delete();
+            return response()->json([
+                'status'=>true,
+                'message'=>'Xóa địa chỉ thành công',
+                
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'=>true,
+                'message'=>'Có lỗi khi xóa địa chỉ',
+                'error'=>$th
+            ]);
+        }
+    }
     public function getAddress(){
         // $user = Auth::user();
         // dd(Auth::id());
@@ -48,23 +111,29 @@ class AuthController extends Controller
 
         $data =  '';
         foreach ($address as $key => $item) {
-            $data .= '<li class="cus-radio align-items-center justify-content-between">
-                            <input type="radio" name="address_rdo" value="26" id="radio'.$item->id.'" checked="">
-                            <label for="radio'.$item->id.'">
-                                <span>'.$item->name.'</span>
-                                <span>'.$item->phone.'</span>
-                                <span>'.$item->address.'</span>
-                            </label>
-                            <div>
-                                <button type="button" data-toggle="modal" data-target="#EditAddressModal"
-                                    class="edit-address btn btn-outline-primary" data-id="26" data-name="Đạt Lê"
-                                    data-phone="0346531944" data-address="Tân kỳ, Nghệ An adadad">Sửa</button>
-                                <button type="button" class="dlt-address btn btn-outline-primary ml-2"
-                                    data-id="26">Xóa</button>
-                            </div>
-                        </li>';
+            $data .= '<li class="cus-radio align-items-center justify-content-between">';
+            if($key == 0 ){
+                $data .= '<input type="radio" name="address_rdo" value="'.$item->id.'" id="radio'.$item->id.'" checked="checked">';
+            }
+            else{
+                $data .= '<input type="radio" name="address_rdo" value="'.$item->id.'" id="radio'.$item->id.'">';
+            }
+            $data.='<label for="radio'.$item->id.'">
+                            <span>'.$item->name.'</span>
+                            <span>'.$item->phone.'</span>
+                            <span>'.$item->address.'</span>
+                        </label>
+                        <div>
+                            <button type="button" onclick="showEditAddress(this)"
+                                class="edit-address btn btn-outline-primary" data-id="'.$item->id.'" data-name="'.$item->name.'"
+                                data-phone="'.$item->phone.'" data-address="'.$item->address.'">Sửa</button>
+                            <button type="button" class="dlt-address btn btn-outline-primary ml-2"
+                                data-id="'.$item->id.'" onclick="RemoveAddress('.$item->id.')">Xóa</button>
+                        </div>
+                    </li>';
         }   
     
         return response()->json($data);
     }
+    
 }

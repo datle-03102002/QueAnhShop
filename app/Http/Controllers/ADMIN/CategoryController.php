@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ADMIN;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -16,8 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
-        $category = $category->isEmpty() ?[]:$category;
+        $category = Category::paginate(10);
         return view('admin.components.Category.index',compact('category'));
     }
 
@@ -45,8 +45,8 @@ class CategoryController extends Controller
             DB::commit();
             return redirect("/admin/category");
         } catch (Throwable $th) {
-            DB:rollBack();
-            dd("lỗi");
+            DB::rollBack();
+            // dd("lỗi");?
             throw $th;
         }
         return redirect()->back()->withInput();
@@ -89,20 +89,35 @@ class CategoryController extends Controller
             return redirect("/admin/category");
         } catch (Throwable $th) {
             DB::rollback();
-             return redirect()->back()->withInput();
+            return redirect()->back()->withInput();
             throw $th;
 
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $category = Category::find($id);
         $category->delete();
         return redirect("/admin/category");
 
+    }
+    public function changeStatus(Request $request){
+        // dd($request->id);
+        DB::beginTransaction();
+        try {
+            $category = Category::whereIn('id',$request->id)
+            ->update(['status' => $request->status == 'true' ? 1:0]);
+            $product = Product::whereIn('category_id',$request->id)
+            ->update(['status' => $request->status == 'true' ? 1:0]);
+            DB::commit();
+            toastr()->success('Thay đổi trạng thái danh mục thành công');
+            return response()->json(['code' => 200, 'message' => 'Thay đổi trạng thái thành công']);
+
+        } catch (Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            toastr()->error('Có lỗi khi thay đổi trạng thái');
+            return response()->json(['code' => 500, 'message' => 'Có lỗi khi thay đổi trạng thái']);
+        }
     }
 }

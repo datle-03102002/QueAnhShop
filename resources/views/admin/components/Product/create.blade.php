@@ -1,5 +1,17 @@
 @extends('admin.components.dashboard')
+@section('style')
+    <style>
+        .ck.ck-reset.ck-editor.ck-rounded-corners {
+            width: 100%;
+            height: auto;
+            /* min-height: 500px; */
+        }
 
+        .ck.ck-content {
+            min-height: 200px;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="row">
         <div class="col-md-12 ">
@@ -63,14 +75,17 @@
                                 <div class="container-fluid col-6">
                                     <label>Kích thước: </label>
                                     <div class="row mt-2 enableInput" style="max-width: 350px;">
+                                        @error('size')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                         <div class="col-sm">
                                             <label>Small :</label>
-                                            <input type="checkbox" name="size[]" value="small" id="enableInput"
+                                            <input type="checkbox" name="size[]" value="S" id="enableInput"
                                                 onchange="toggleInputFields('enableInput','small')" />
                                         </div>
                                         <div class="col-sm  d-flex justify-content-between ">
                                             <label for="small">Small:</label>
-                                            <input type="number" name="small" id="small" class="form-control"
+                                            <input type="number" name="S" id="small" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
@@ -80,12 +95,12 @@
                                     <div class="row mt-2 enablemedium" style="max-width: 350px;">
                                         <div class="col-sm ">
                                             <label>Medium :</label>
-                                            <input type="checkbox" name="size[]" value="medium" id="enablemedium"
+                                            <input type="checkbox" name="size[]" value="M" id="enablemedium"
                                                 onchange="toggleInputFields('enablemedium','medium')" />
                                         </div>
                                         <div class="col-6 d-flex justify-content-between ">
                                             <label for="medium">Medium:</label>
-                                            <input type="number" name="medium" id="medium" class="form-control"
+                                            <input type="number" name="M" id="medium" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
@@ -94,12 +109,12 @@
                                     <div class="row mt-2 enablelarge" style="max-width: 350px;">
                                         <div class="col-sm ">
                                             <label>Large :</label>
-                                            <input type="checkbox" name="size[]" value="large" id="enablelarge"
+                                            <input type="checkbox" name="size[]" value="L" id="enablelarge"
                                                 onchange="toggleInputFields('enablelarge','large')" />
                                         </div>
                                         <div class="col-6 d-flex justify-content-between ">
                                             <label for="large">Large:</label>
-                                            <input type="number" name="large" id="large" class="form-control"
+                                            <input type="number" name="L" id="large" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
@@ -108,12 +123,12 @@
                                     <div class="row mt-2 enableXL" style="max-width: 350px;">
                                         <div class="col-sm ">
                                             <label>XL :</label>
-                                            <input type="checkbox" name="size[]" value="xl" id="enableXL"
+                                            <input type="checkbox" name="size[]" value="XL" id="enableXL"
                                                 onchange="toggleInputFields('enableXL','xl')" />
                                         </div>
                                         <div class="col-6 d-flex justify-content-between ">
                                             <label for="xl">XL:</label>
-                                            <input type="number" name="xl" id="xl" class="form-control"
+                                            <input type="number" name="XL" id="xl" class="form-control"
                                                 style="width: 100px;"oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
@@ -122,12 +137,12 @@
                                     <div class="row mt-2 enableXXL" style="max-width: 350px;">
                                         <div class="col-sm ">
                                             <label>XXL :</label>
-                                            <input type="checkbox" name="size[]" value="xxl" id="enableXXL"
+                                            <input type="checkbox" name="size[]" value="XXL" id="enableXXL"
                                                 onchange="toggleInputFields('enableXXL','xxl')" />
                                         </div>
                                         <div class="col-6 d-flex justify-content-between ">
                                             <label for="xxl">XXL:</label>
-                                            <input type="number" name="xxl" id="xxl" class="form-control"
+                                            <input type="number" name="XXL" id="xxl" class="form-control"
                                                 style="width: 100px;" oninput="validateTotal()" min="1"
                                                 step="1" readonly />
                                         </div>
@@ -156,7 +171,7 @@
                         <div class="col-md mb-3">
                             <label>Mô tả sản phẩm
                             </label>
-                            <textarea style="height:90px; width:543px" name="description" class="form-control"></textarea>
+                            <textarea id="editor" style="height:90px; width:543px" name="description" class="form-control ckeditor"></textarea>
                             @error('description')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -170,7 +185,32 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
     <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('upload', ['_token' => csrf_token()]) }}",
+                },
+                language: 'en',
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells',
+                        'tableCellProperties',
+                        'tableProperties'
+                    ]
+                },
+
+                // Thiết lập kích thước
+                width: '100%',
+                height: 'auto'
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
         function toggleInputFields(idSize, InputSize) {
             let enableInputCheckbox = document.getElementById(idSize)
             let inputFields = document.querySelectorAll("#" + InputSize);

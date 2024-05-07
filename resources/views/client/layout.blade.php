@@ -47,18 +47,18 @@
                                             <a href="{{ url('/cuahang') }}">
                                                 Cửa hàng
                                             </a>
-                                            <ul class="mega-sub-menu d-none ">
+                                            {{-- <ul class="mega-sub-menu ">
                                                 <li
                                                     class="mega-dropdown menu-item-has-children nav-item position-absolute ">
                                                     <a href="">Danh Mục</a>
                                                     <ul class="nav navbar-nav  ">
-                                                        <li class="nav-item">Danh mục 1</li>
-                                                        <li class="nav-item">Danh mục 2</li>
-                                                        <li class="nav-item">Danh mục 3</li>
-                                                        <li class="nav-item">Danh mục 4</li>
+                                                        @foreach ($category as $item)
+                                                            <li class="nav-item">{{ $item->name }}</li>
+                                                        @endforeach
+
                                                     </ul>
                                                 </li>
-                                            </ul>
+                                            </ul> --}}
                                         </li>
                                         <li class="nav-item mx-2 ">
                                             <a href="{{ url('tin-tuc') }}">Tin tức</a>
@@ -76,7 +76,7 @@
                         <div class="col-lg-3">
                             <div class="header-meta-info d-lg-flex ">
                                 <div class="header-search">
-                                    <form action="" method="get">
+                                    <form action="{{ route('locsanpham') }}" method="get">
                                         <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm"
                                             autocomplete="off" class=""
                                             style="border:none;background: transparent">
@@ -85,6 +85,9 @@
                                         </button>
                                     </form>
                                 </div>
+                                <ul class="search-product">
+
+                                </ul>
                                 <div class="header-account d-flex ">
                                     <div class="header-user">
                                         @if (!Auth::check() || Auth::user()->role != 'khachhang')
@@ -99,11 +102,19 @@
                                                     <i class="fa fa-user" aria-hidden="true"></i>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="">Hồ
-                                                            sơ của tôi</a>
+                                                    <li>
+                                                        <a class="dropdown-item" href="">Hồ
+                                                            sơ của tôi
+                                                        </a>
                                                     </li>
-                                                    <li><a class="dropdown-item" href="{{ route('logout') }}">Đăng
-                                                            xuất</a>
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('ordered') }}">Đơn mua
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('logout') }}">Đăng
+                                                            xuất
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -126,7 +137,6 @@
     </div>
     <div class="model  ">
         <div class="model-content">
-
         </div>
 
     </div>
@@ -146,19 +156,28 @@
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    // var swiper = new Swiper(".mySwiper", {
-    //     slidesPerView: 1,
-    //     spaceBetween: 30,
-    //     loop: true,
-    //     pagination: {
-    //         el: ".swiper-pagination",
-    //         clickable: true,
-    //     },
-    //     navigation: {
-    //         nextEl: ".swiper-button-next",
-    //         prevEl: ".swiper-button-prev",
-    //     },
-    // });
+    // goi y tim kiem
+    $('input[name="keyword"]').on('keyup', function() {
+        // console.log('a');
+        const value = $('input[name="keyword"]').val();
+        const token = $('input[name="_token"]').val();
+        $.ajax({
+            url: '/goiytimkiem',
+            type: 'POST',
+            data: {
+                value: value,
+                _token: token
+            },
+            success: function(data) {
+                $('.search-product').fadeIn();
+                $(".search-product").html(data);
+                console.log(data);
+            }
+        })
+    })
+    $('input[name="keyword"]').on('blur', function() {
+        $('.search-product').fadeOut();
+    });
     const swiperNewProduct = new Swiper(".newProduct", {
         watchSlidesProgress: true,
         slidesPerView: 4,
@@ -260,7 +279,7 @@
                 html += `</div>
                         `;
                 arrayQuantity.forEach((item, index) => {
-                    // console.log(index);
+                    // console.log(arrayQuantity);
                     if (index == 0) {
                         html += `<div class="quantity-item active" data-sizecolor="${item['size']}${item['color']}" >
                                 Còn lại: <span>${item['quantity']}</span>
@@ -274,7 +293,7 @@
                         <div class="box-quantity">
                             <span>Số lượng: </span>
                             <i onclick="updateQuantityModal('giam')" class="fa fa-minus-square" aria-hidden="true"></i>
-                            <input type="number" step="1" min="1" value="1" class='quantity' oninput="validity.valid||(value='1');">  
+                            <input type="number" step="1" min="1" value="1" class='quantity' oninput="validity.valid||(value='1');" onchange="updateQuantityModal('change')">  
                             <i onclick="updateQuantityModal('tang')" class="fa fa-plus-square" aria-hidden="true"></i>  
                         </div>
                         <div><button class="btn btn-primary mt-2"  onclick="btnAddToCart(${id})">
@@ -311,12 +330,15 @@
         });
         // console.log(size + color);
         $('.quantity-item').each(function() {
+            console.log($(this).data('sizecolor'));
             if ($(this).data('sizecolor') == size + color) {
                 $(this).addClass('active');
             } else {
                 $(this).removeClass('active');
             }
         })
+        // console.log(size + color);
+        // console.log('oke');
         $('.quantity').val(1);
     }
 
@@ -324,8 +346,10 @@
         const Authlogin = {!! json_encode(Auth::check()) !!};
         if (Authlogin) {
             let quantityStock = document.querySelector(".quantity-item>span").textContent;
+            // console.log(typeof quantityStock);
             let quantity = $(".quantity").val();
-            if (quantity <= quantityStock) {
+            // console.log(quantity <= parseInt(quantityStock));
+            if (quantity <= parseInt(quantityStock)) {
                 let size;
                 let color;
                 $('input[name="size"]').each(function() {
@@ -392,10 +416,14 @@
             } else {
                 inputQuantity.val(1);
             }
-        } else {
-            if (currentQuantity < quantityStock) {
+        } else if (action == 'tang') {
+            if (currentQuantity < parseInt(quantityStock)) {
                 inputQuantity.val(currentQuantity + 1);
             } else {
+                inputQuantity.val(quantityStock);
+            }
+        } else {
+            if (currentQuantity > parseInt(quantityStock)) {
                 inputQuantity.val(quantityStock);
             }
         }

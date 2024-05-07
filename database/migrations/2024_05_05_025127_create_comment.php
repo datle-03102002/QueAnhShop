@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('comment', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("product_id");
-            $table->unsignedBigInteger('user_id')->unique();
-            $table->string('body');
+            $table->unsignedBigInteger('user_id');
+            $table->string('body')->nullable();
             $table->integer('point');
             $table->string('images')->nullable();
             $table->foreign('product_id')->references('id')->on('Products')->onDelete('cascade')->onUpdate('cascade');

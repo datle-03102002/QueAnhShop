@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\productDetail;
 use App\Models\Images;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 // use Illuminate\Support\Facades\Log;
@@ -21,7 +22,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::with('category')->paginate(10);
+        $product = Product::with('category')->paginate(30);
         // dd($product);
         return view('admin.components.Product.index',compact('product'));
     }
@@ -42,33 +43,50 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        // $data =  $request->all();
+        $data = $request->validate([
+            'name'=>'required',
+            'category'=>'required',
+            'price'=>'required',
+            'size'=>'required',
+            'color'=>'required',
+            'description'=>'required',
+            'image'=>'required'
+            
+        ],[
+            'name.required'=>'Tên sản phẩm không được để trống',
+            'price.required'=>'Giá sản phẩm không được để trống',
+            'size.required'=>'Phải chọn ít nhất 1 size',
+            'color.required'=>'Phải có ít nhất 1 màu',
+            'image.required'=>'Phải có ít nhất 1 ảnh',
+            'description.required'=>'Mô tả sản phẩm không được để trống',
+        ]);
+        // dd($data['image']);
         // dd($data);
-        $product = new Product;
-        $product->name = $data['name'];
-        $product->description = $data['description'];
-        $product->price = $data['price'];
-        $stock = 0;
-        foreach ($data['size'] as $key1=>$size) {
-            $stock +=  $data[$size] * count($data['color']);
-        }
-        $product->stock = $stock;
-        $product->create_at = Carbon::now();
-        $product->create_by = 'admin';
-        $product->category_id = $data['category'];
-        $product->save();
-        $productID = $product->id;
+        $data['S'] = $request->S;
+        $data['M'] = $request->M;
+        $data['L'] = $request->L;
+        $data['XL'] = $request->XL;
+        $data['XXL'] = $request->XXL;
+        
+        try {
+            $product = new Product;
+            $product->name = $data['name'];
+            $product->slug = Str::slug($data['name']);
+            $product->description = $data['description'];
+            $product->price = $data['price'];
+            $stock = 0;
+            foreach ($data['size'] as $key1=>$size) {
+                $stock +=  $data[$size] * count($data['color']);
+            }
+            $product->stock = $stock;
+            $product->create_at = Carbon::now();
+            $product->create_by = 'admin';
+            $product->category_id = $data['category'];
+            $product->save();
+            $productID = $product->id;
         // dd($productID);
-        foreach ($data['image'] as $key => $item) {
-            $image = new Images;
-            $extenstion = $item->getClientOriginalExtension();
-            $filename = time().'.'.$extenstion;
-            $item->move('/assets/uploads', $filename);
-            $image->product_id  = $productID;
-            $image->url = $filename;
-            $image->save();
-            // $student-> = $productID;
-        }
+        
         // dd($productID);
 
         foreach($data['size'] as $key1=>$size){
@@ -83,11 +101,25 @@ class ProductController extends Controller
                 $product_detail->save();
             }
         }
+        foreach ($data['image'] as $key => $item) {
+            // dd($item);
+            $image = new Images;
+            $extenstion = $item->getClientOriginalExtension();
+            $filename = time().'.'.$extenstion;
+            $item->move(public_path('/assets/uploads/'), $filename);
+            $image->product_id  = $productID;
+            $image->url = $filename;
+            $image->save();
 
-        return 'ok';
-
-
-
+            
+        }
+        toastr()->success('Thêm sản phẩm thành công');
+        return redirect('/admin/product');
+        } catch (\Throwable $th) {
+            toastr()->error("{$th}");
+            // toastr()->error('Có lỗi khi thêm sản phẩm vui lòng thử lại');
+            return  redirect()->back();
+        }
     }
 
     /**
@@ -117,24 +149,63 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        dd($request);
+        $data = $request->all();
+        // dd($data);
+        
+        $product = Product::find($id);
+        $product->category_id = $data['category'];
+        $product->stock = $data['quantity'];
+        $product->name = $data['name'];
+        $product->price = $data['price'];
+        $product->description = $data['description'];
+        $product->save();
+        if(array_key_exists('image', $data)){
+            foreach ($data['image'] as $key => $item) {
+                $image = new Images;
+                $extenstion = $item->getClientOriginalExtension();
+                $filename = time().'.'.$extenstion;
+                $item->move(public_path('/assets/uploads/'), $filename);
+                $image->product_id  = $id;
+                $image->url = $filename;
+                $image->save();
+            }
+        }
+        return $this->index();
     }
 
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(string $id)
     {
         $product = Product::find($id);
         // dd($product);
         $product->delete();
+        toastr()->success('Xóa sản phẩm thành công');
         return redirect()->back();
     }
-    public function changeStatus($status, $id){
-        $product = Product::find($id);
-        $product->status= $status == 'true' ? 1:0;
-        $product->save();
-        return response()->json(['code' => 200, 'mes' => $status == 'true' ? 1:0]);
+    public function deleteProduct(Request $request){
+        $product = Product::whereIn('id',$request->id)->delete();
+        toastr()->success('Xóa sản phẩm thành công');
+        return response()->json(['code' => 200, 'message' => 'Xóa sản phẩm thành công']);
+    }
+    public function changeStatus(Request $request){
+        // dd($request->id);
+        DB::beginTransaction();
+        try {
+            $product = Product::whereIn('id',$request->id)
+            ->update(['status' => $request->status == 'true' ? 1:0]);
+                DB::commit();
+                toastr()->success('Thay đổi trạng thái sản phẩm thành công');
+                return response()->json(['code' => 200, 'message' => 'Thay đổi trạng thái thành công']);
+
+        } catch (Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            toastr()->error('Có lỗi khi thay đổi trạng thái');
+            return response()->json(['code' => 500, 'message' => 'Có lỗi khi thay đổi trạng thái']);
+        }
     }
     public function updateProductDetail(Request $request){
         $data = $request->data;
@@ -158,5 +229,11 @@ class ProductController extends Controller
         $productDetail = productDetail::find($id);
         $productDetail->delete();
         return response()->json(['code' => 200, 'mes' => 'oke']);
+    }
+    public function deleteImageByPro(Request $request){
+        $id = $request->id;
+        $proId = $request->product_id;
+        Images::where('id',$id)->where('product_id',$proId)->delete();
+        return response()->json(['code'=>200]);
     }
 }

@@ -15,6 +15,10 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+     public function cart()
+    {
+        return $this->belongsToMany(Cart::class)->withPivot('size');
+    }
     public function productDetail()
     {
         return $this->hasMany(ProductDetail::class);
@@ -23,10 +27,11 @@ class Product extends Model
     {
         return $this->hasMany(Images::class);
     }
-    public function cart()
+    public function orderDetail()
     {
-        return $this->belongsToMany(Cart::class)->withPivot('size');
+        return $this->hasMany(OrderDetail::class);
     }
+   
     
     
 }

@@ -18,7 +18,7 @@
             left: 10px;
             transform: translate(0, -50%);
             /* animation: opac 0.5s ease-in-out;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            animation-iteration-count: infinite; */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                animation-iteration-count: infinite; */
         }
 
         .list-image .next {
@@ -244,8 +244,7 @@
                     @endphp
                     @foreach ($product->productDetail as $key => $item)
                         {{-- @php
-                            // dd($item->color . $item->size);
-                            
+                            dd($item->id);
                         @endphp --}}
                         @if ($key == 0)
                             <div class="quantity-item active" data-sizecolor="{{ $item->size }}{{ $item->color }}">
@@ -303,7 +302,42 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="danhgia" role="tabpanel" aria-labelledby="danhgia-tab">...
+                    <div class="tab-pane fade" id="danhgia" role="tabpanel" aria-labelledby="danhgia-tab">
+                        <div class="reviews">
+                            @if (count($comment) > 0)
+                                <h3 class="review-title">Khách hàng đánh giá</h3>
+                                <ul class="reviews-items">
+                                    @foreach ($comment as $item)
+                                        <li>
+                                            <div class="single-review">
+                                                <h6 class="name">{{ $item->user->name }}</h6>
+                                                <div class="rating-date">
+                                                    <ul class="rating">
+                                                        @for ($i = 0; $i < $item->point; $i++)
+                                                            <li class="rating-on"><i class="fa fa-star"></i></li>
+                                                        @endfor
+                                                    </ul>
+                                                    <span class="date">{{ $item->created_at }}</span>
+                                                </div>
+                                                @if ($item->body != null)
+                                                    <p>{{ $item->body }}</p>
+                                                @endif
+                                                @if ($item->images != null)
+                                                    <div style="max-width: 150px; max-height: 150px;">
+                                                        <img class="w-100 object-fit-cover "
+                                                            src="{{ asset('assets/uploads/' . $item->images) }}"
+                                                            alt="">
+                                                    </div>
+                                                @endif
+
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <h3 class="review-title">Sản phẩm chưa có đánh giá nào</h3>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

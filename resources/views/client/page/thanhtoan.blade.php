@@ -8,7 +8,7 @@
                     <div class="container__address-content">
                         <div class="container__address-content-hd justify-content-between">
                             <div><i class="container__address-content-hd-icon fa fa-map-marker"></i>Địa Chỉ Nhận Hàng</div>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddressModal">+
+                            <button type="button" class="btn btn-primary show-add-address">+
                                 Thêm
                                 Địa Chỉ</button>
                         </div>
@@ -55,15 +55,15 @@
                                         <span class="amount">{{ number_format($item->product->price, 0, '.', ',') }}</span>
                                     </td>
                                     <td class="quantity">
-                                        <div class="quantity d-inline-flex align-items-center ">
-                                            <i class="fa fa-minus-square"></i>
-                                            <input type="number" class="QuantityBuy" id="QuantityBuy-56"
-                                                value="{{ $item->quantity }}" min="1"
-                                                oninput="validity.valid||(value='1');">
-                                            <i class="fa fa-plus-square"></i>
-                                            <div class="alert-qty-input"><span class="message-qty-input">Mua tối đa
+                                        <div class="quantity d-inline-flex align-items-center border-0 ">
+                                            {{-- <i class="fa fa-minus-square"></i> --}}
+                                            <span>{{ $item->quantity }}</span>
+                                            {{-- <input type="hidden" class="QuantityBuy" id="QuantityBuy-56"
+                                                value="{{ $item->quantity }}"> --}}
+                                            {{-- <i class="fa fa-plus-square"></i> --}}
+                                            {{-- <div class="alert-qty-input"><span class="message-qty-input">Mua tối đa
                                                     {{ $item->stock }} sản
-                                                    phẩm!</span></div>
+                                                    phẩm!</span></div> --}}
                                             {{-- <input type="hidden" value="35">
                                     <input type="hidden" value="175000">
                                     <input type="hidden" value="42"> --}}
@@ -73,10 +73,10 @@
                                         <span
                                             class="total-amount">{{ number_format($item->product->price * $item->quantity, 0, '.', ',') }}</span>
                                     </td>
-                                    <td class="remove">
+                                    {{-- <td class="remove">
                                         <button class="view-hover delete-pd-cart bg-transparent border-0 "
                                             data-id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -95,13 +95,14 @@
                                 <div class="single-form flex-fill mr-30">
                                     <input type="text" id="VoucherCode"
                                         placeholder="Nhập mã giảm giá (chỉ áp dụng 1 lần)">
+                                    <small color="red" class="voucherMessage text-primary alert-voucher"></small>
                                 </div>
                                 <div class="cart-form-btn d-flex">
                                     <button type="button" style="width:97px;"
                                         class="btn btn-primary pl-2 pr-2 check-voucher">Áp dụng</button>
                                 </div>
                             </div>
-                            <div class="text-primary alert-voucher"></div>
+                            {{-- <div class="text-primary alert-voucher"></div> --}}
                         </div>
                     </div>
                     <div class="col-lg-6 container__address-content">
@@ -137,17 +138,16 @@
                                             <td class="text-right">{{ number_format($total, 0, ',', '.') }}đ</td>
                                         </tr>
                                         <tr class="shipping">
-                                            <td>Phí vận chuyển (Miễn phí vận chuyển cho đơn hàng trên 1.000.000đ)</td>
-                                            <td class="text-right">
-                                                Miễn phí </td>
+                                            <td>Giảm giá</td>
+                                            <td class="text-right voucherDiscount">
+                                                0đ </td>
                                         </tr>
 
                                         <tr>
                                             <td width="70%">Thành tiền</td>
+                                            <input type="hidden" name="totalmoney" value="{{ $total }}">
                                             <td class="text-right totalBill">{{ number_format($total, 0, ',', '.') }}đ</td>
                                         </tr>
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -177,5 +177,165 @@
                     document.querySelector(".list-address").innerHTML = data;
                 })
         }
+        $('.show-add-address').click(function() {
+            let html = `    <h5>Thêm địa chỉ</h5>
+                            <div class="form-group">
+                                <label for="">Tên người nhận</label>
+                                <input type="text" class="form-control" name="nguoinhan">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Số điện thoại</label>
+                                <input type="text" class="form-control" name="sodienthoai">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Địa chỉ</label>
+                                <input type="text" class="form-control" name="diachi">
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-secondary" onclick="closeModel()">Hủy</button>
+                                <button type="button" class="btn btn-primary add-address" onclick="addAddress()">Lưu</button>
+                                </div>
+                        `;
+            document.querySelector(".model-content").innerHTML += html;
+            document.querySelector(".model").classList.add('active')
+        })
+
+        function addAddress() {
+            const customerName = $('input[name="nguoinhan"]').val();
+            const phone = $('input[name="sodienthoai"]').val();
+            const address = $('input[name="diachi"]').val();
+            const token = $('input[name="_token"]').val();
+            $.ajax({
+                type: 'post',
+                url: '/add-address',
+                data: {
+                    name: customerName,
+                    phone: phone,
+                    address: address,
+                    _token: token
+                },
+                success: function(data) {
+                    closeModel();
+                    getAddress();
+                }
+            })
+        }
+
+        function editAddress() {
+            const customerName = $('input[name="nguoinhan"]').val();
+            const phone = $('input[name="sodienthoai"]').val();
+            const address = $('input[name="diachi"]').val();
+            const token = $('input[name="_token"]').val();
+            const id = $('input[name="id"]').val();
+            $.ajax({
+                type: 'post',
+                url: '/edit-address',
+                data: {
+                    id: id,
+                    name: customerName,
+                    phone: phone,
+                    address: address,
+                    _token: token
+                },
+                success: function(data) {
+                    closeModel();
+                    getAddress();
+                }
+            })
+        }
+
+        function showEditAddress(data) {
+            let html = `    <h5>Thêm địa chỉ</h5>
+                            <input type="hidden" name="id" value="${data.dataset.id}"/>
+                            <div class="form-group">
+                                <label for="">Tên người nhận</label>
+                                <input type="text" class="form-control" name="nguoinhan" value="${data.dataset.name}">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Số điện thoại</label>
+                                <input type="text" class="form-control" name="sodienthoai" value="${data.dataset.phone}">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Địa chỉ</label>
+                                <input type="text" class="form-control" name="diachi" value="${data.dataset.address}">
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-secondary" onclick="closeModel()">Hủy</button>
+                                <button type="button" class="btn btn-primary add-address" onclick="editAddress()">Lưu</button>
+                                </div>
+                        `;
+            document.querySelector(".model-content").innerHTML += html;
+            document.querySelector(".model").classList.add('active')
+        }
+
+        function RemoveAddress(id) {
+            swal({
+                    title: 'Thông báo',
+                    text: 'Bạn có muốn xóa địa chỉ này',
+                    type: "error"
+                })
+                .then(
+                    (isConfirm) => {
+                        // console.log(isConfirm);
+                        if (isConfirm) {
+                            const token = $('input[name="_token"]').val();
+                            $.ajax({
+                                type: 'post',
+                                url: '/remove-address',
+                                data: {
+                                    id: id,
+                                    _token: token
+                                },
+                                success: function(data) {
+                                    // closeModel();
+                                    getAddress();
+                                }
+                            })
+                        }
+                    }
+                )
+
+        }
+        $('.btnorder').click(CheckAddress);
+
+        function CheckAddress(event) {
+            // kiem tra xem nguoi dung da có dia chi giao hang chua
+            let address = document.querySelectorAll('input[name="address_rdo"]').length;
+            if (address <= 0) {
+                swal('Thông báo', 'Bạn chưa có địa chỉ giao hàng hãy nhập địa chỉ giao hàng', 'info');
+                event.preventDefault();
+            }
+        }
+        $('.check-voucher').click(function() {
+            const token = $('input[name="_token"]').val();
+            $voucherCode = $("#VoucherCode").val();
+            if ($voucherCode != '') {
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('checkvoucher') }}",
+                    data: {
+                        _token: token,
+                        voucher: $voucherCode
+                    },
+                    success: function(data) {
+                        // console.log(data);
+                        if (data.code == 200) {
+                            $(".voucherMessage").html(data.message);
+                            let currentTotal = $('.totalBill').html().replace(/\./g, '').replace('đ',
+                                '');
+                            console.log(parseFloat(currentTotal));
+                            let total = parseFloat(currentTotal) - parseFloat(data.data.giamgia);
+                            $('.totalBill').html(total.toLocaleString('vi-VN') + 'đ');
+                            $('input[name="totalmoney"]').val(total);
+                            $('.voucherDiscount').html(data.data.giamgia + 'đ')
+                            $('.cart-coupon').append(
+                                `<input type="hidden" value="${data.data.id}" name="voucher">`)
+                        } else {
+                            $(".voucherMessage").html(data.message);
+                        }
+                    }
+                })
+            }
+        })
     </script>
 @endsection

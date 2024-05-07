@@ -10,6 +10,7 @@ class Address extends Model
     use HasFactory;
     
     protected $table = 'address';
+    public $timestamps = false;
     public function user()
     {
         return $this->belongsTo(User::class);

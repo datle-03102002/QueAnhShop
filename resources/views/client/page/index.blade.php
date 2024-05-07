@@ -18,7 +18,7 @@
                                 </p>
 
                                 <ul class="slider-btn">
-                                    <li><a href="http://kidolshop.click/store" class="btn btn-round btn-primary">Bắt
+                                    <li><a href="" class="btn btn-round btn-primary">Bắt
                                             đầu mua sắm</a></li>
                                 </ul>
                             </div>
@@ -39,7 +39,7 @@
                                 </p>
 
                                 <ul class="slider-btn">
-                                    <li><a href="http://kidolshop.click/store" class="btn btn-round btn-primary">Bắt
+                                    <li><a href="" class="btn btn-round btn-primary">Bắt
                                             đầu mua sắm</a></li>
                                 </ul>
                             </div>
@@ -137,17 +137,19 @@
                             <div class="single-product">
                                 <div class="product-image">
                                     <a href="">
-                                        <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}" alt="">
+                                        <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}" alt="">
                                     </a>
                                     <div class="action-links">
                                         <ul>
                                             <li>
-                                                <a class="product-detail" href=""><i class="fa fa-eye"
-                                                        aria-hidden="true"></i></a>
+                                                <a class="product-detail"
+                                                    href="{{ route('chitietsanpham', ['name' => $item->slug]) }}"><i
+                                                        class="fa fa-eye" aria-hidden="true"></i></a>
                                             </li>
                                             <li>
-                                                <a class="add-to-cart" href=""><i class="fa fa-cart-plus"
-                                                        aria-hidden="true"></i></a>
+                                                <a class="add-to-cart" href=""
+                                                    onclick="addToCart({{ $item->id }},event)"><i
+                                                        class="fa fa-cart-plus" aria-hidden="true"></i></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -244,28 +246,104 @@
     </div>
 
     {{-- baiviet --}}
-    <div class="container " style="padding: 90px;">
-        <div class="row d-flex justify-content-center ">
-            <div class="col-6 ">
-                <div class="section-title text-center ">
-                    <h2>Bài viết của chúng tôi</h2>
-                    <p>A perfect blend of creativity, energy, communication, happiness and love. Let us arrange
-                        a smile for you.</p>
+    <div class="blog-area blog-bg section-padding-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-9 col-sm-11">
+                    <div class="section-title text-center">
+                        <h2 class="title">Bài Viết Của Chúng Tôi</h2>
+                        <p>A perfect blend of creativity, energy, communication, happiness and love. Let us arrange a
+                            smile for you.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-wrapper mt-30">
+                <div class="swiper-container blog-active swiper-container-initialized swiper-container-horizontal">
+                    <div class="swiper-wrapper" aria-live="polite">
+                        @foreach ($post as $item)
+                            <div class="single-blog">
+                                <div class="blog-image">
+                                    <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
+                                            src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
+                                </div>
+                                <div class="blog-content">
+                                    <h4 class="title"><a
+                                            href="{{ route('post.detail', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                                    </h4>
+                                    <div class="articles-date">
+                                        <p><span>{{ $item->created_at }}</span></p>
+                                    </div>
+                                    {{-- <div class="four-line mb-4">
+                                        <p>{{ $item->description }}</p>
+                                    </div> --}}
+
+                                    <div class="blog-footer">
+                                        <a class="more" href="{{ route('post.detail', ['slug' => $item->slug]) }}">Tìm
+                                            hiểu thêm</a>
+                                        <!-- <p class="comment-count"><i class="icon-message-circle"></i> 0</p> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="single-blog">
+                                <div class="blog-image">
+                                    <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
+                                            src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
+                                </div>
+                                <div class="blog-content">
+                                    <h4 class="title"><a
+                                            href="{{ route('post.detail', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                                    </h4>
+                                    <div class="articles-date">
+                                        <p><span>{{ $item->created_at }}</span></p>
+                                    </div>
+                                    {{-- <div class="four-line mb-4">
+                                        <p>{{ $item->description }}</p>
+                                    </div> --}}
+
+                                    <div class="blog-footer">
+                                        <a class="more" href="{{ route('post.detail', ['slug' => $item->slug]) }}">Tìm
+                                            hiểu thêm</a>
+                                        <!-- <p class="comment-count"><i class="icon-message-circle"></i> 0</p> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="single-blog">
+                                <div class="blog-image w-100 ">
+                                    <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
+                                            src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
+                                </div>
+                                <div class="blog-content">
+                                    <h4 class="title"><a
+                                            href="{{ route('post.detail', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                                    </h4>
+                                    <div class="articles-date">
+                                        <p><span>{{ $item->created_at }}</span></p>
+                                    </div>
+                                    {{-- <div class="four-line mb-4">
+                                        <p>{{ $item->description }}</p>
+                                    </div> --}}
+
+                                    <div class="blog-footer">
+                                        <a class="more" href="{{ route('post.detail', ['slug' => $item->slug]) }}">Tìm
+                                            hiểu thêm</a>
+                                        <!-- <p class="comment-count"><i class="icon-message-circle"></i> 0</p> -->
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <!-- Add Arrows -->
+                        @if (count($post) > 3)
+                            <div class="swiper-next" tabindex="0" role="button" aria-label="Next slide"
+                                aria-controls="swiper-wrapper-5eab3a3b40429f0d"><i class="fa fa-angle-right"></i></div>
+                            <div class="swiper-prev" tabindex="0" role="button" aria-label="Previous slide"
+                                aria-controls="swiper-wrapper-5eab3a3b40429f0d"><i class="fa fa-angle-left"></i></div>
+                            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="swiper mySwiper mt-5 ">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">Slide 1</div>
-                <div class="swiper-slide">Slide 2</div>
-                <div class="swiper-slide">Slide 3</div>
-                <div class="swiper-slide">Slide 4</div>
-                <div class="swiper-slide">Slide 5</div>
-                <div class="swiper-slide">Slide 6</div>
-                <div class="swiper-slide">Slide 7</div>
-                <div class="swiper-slide">Slide 8</div>
-                <div class="swiper-slide">Slide 9</div>
-            </div>
-        </div>
+
     </div>
 @endsection

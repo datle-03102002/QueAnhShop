@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('slug') ;
             // $table->string('defaultImage');
             // $table->json('listImage');
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(true);
             $table->dateTime('create_at');
             $table->string('create_by');
             $table->dateTime('update_at')->nullable();

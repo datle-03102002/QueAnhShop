@@ -1,65 +1,3 @@
-/*------------------------------------------------------------------
- [Master Stylesheet]
-
-  Project:	Regal Admin
-  Version:	1.0.0
--------------------------------------------------------------------*/
-/*-------------------------------------------------------------------
-  ===== Table of Contents =====
-
-  * Bootstrap functions
-  * Template variables
-  * SCSS Compass Functions
-  * Boostrap Main SCSS
-  * Template mixins
-    + Animation Mixins
-    + Badge Mixins
-    + Button Mixins
-    + Miscellaneous Mixins
-    + BlockQuote Mixins
-    + Cards Mixins
-    + Color Functions Mixins
-    + Tooltips
-  * Core Styles
-    + Reset Styles
-    + Fonts
-    + Functions
-    + Backgrounds
-    + Sidebar
-    + Navbar
-    + Typography
-    + Miscellaneous
-    + Footer
-    + Layouts
-    + Utilities
-    + Demo styles
-  * Components
-    + Buttons
-    + Breadcrumbs
-    + Cards
-    + Checkboxes and Radios
-    + Dropdowns
-    + Forms
-    + Icons
-    + Lists
-    + Preview
-    + Tables
-  * Plugin Overrides
-    + Bootstrap Tour
-    + Jquery File Upload
-    + Progressbar-js
-    + Rating
-    + Select2
-    + Typeahead
-  * Landing screens
-    + Auth
--------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-/* === Import Bootstrap functions and variables === */
-/*-------------------------------------------------------------------*/
-/* === Import template variables === */
-/*-------------------------------------------------------------------*/
-/* === SCSS Compass Functions === */
 @-moz-keyframes flash {
     0% {
         opacity: 1;
@@ -9293,7 +9231,7 @@
     --gray-lighter: #e8eff4;
     --gray-lightest: #e6e9ed;
     --black: #000000;
-    --primary: #ec37fc;
+    --primary: #f379a7;
     --secondary: #e4e6f6;
     --success: #51c81c;
     --info: #3794fc;
@@ -12099,8 +12037,8 @@ fieldset:disabled .ajax-upload-dragdrop a.ajax-file-upload,
 
 .btn-primary {
     color: #fff;
-    background-color: #ec37fc;
-    border-color: #ec37fc;
+    background-color: var(--primary);
+    border-color: var(--primary);
 }
 
 .btn-primary:hover {
@@ -24048,7 +23986,7 @@ dl li {
 /* Sidebar */
 .sidebar {
     min-height: calc(100vh - 60px);
-    background: #ec37fc;
+    background: #f379a7;
     font-family: "Karla", sans-serif;
     font-weight: normal;
     padding: 0;
@@ -24341,7 +24279,7 @@ dl li {
 }
 
 .navbar .navbar-brand-wrapper {
-    background: #ec37fc;
+    background: #f379a7;
     transition: width 0.25s ease, background 0.25s ease;
     -webkit-transition: width 0.25s ease, background 0.25s ease;
     -moz-transition: width 0.25s ease, background 0.25s ease;

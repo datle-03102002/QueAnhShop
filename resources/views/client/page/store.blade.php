@@ -16,6 +16,9 @@
                     <h4>Theo danh mục</h4>
                     <ul class="categories-list">
                         @foreach ($category as $item)
+                            {{-- @php
+                                dd($category);
+                            @endphp --}}
                             <li class="d-flex align-items-center mt-2">
                                 <input class="filter-product" type="checkbox" value="{{ $item->id }}"
                                     id="{{ $item->id }}" style="width:15px;height:15px;" onclick="filterCategory()">
@@ -121,7 +124,8 @@
 
         // Gọi hàm setCheckboxState() khi trang được tải lại
         setInputState();
-        let url = window.location.href + '?store=all';
+        let url = window.location.href;
+        url = url.indexOf('?keyword=') != -1 ? url : `${window.location.origin}/cuahang?store=all`;
         let priceTo = document.getElementById('priceTo').value;
         let priceFrom = $('#priceFrom').val();
         console.log(priceTo);
