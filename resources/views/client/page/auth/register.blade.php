@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Đăng ký</title>
     <style>
         /* Importing fonts from Google */
         /* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap'); */
@@ -97,7 +97,8 @@
         }
 
         .wrapper .btn:hover {
-            background-color: #039BE5;
+            background-color: #3E444A;
+            border-color: #3E444A;
         }
 
         .wrapper a {
@@ -120,36 +121,67 @@
 </head>
 
 <body>
+
+
     <div class="wrapper">
         <div class="logo">
             <img src="{{ asset('assets/imgs/logo.jpg') }}" alt="">
         </div>
-        <div class="text-center mt-4 name d-flex justify-content-center ">
+        <div class=" name  ">
             Quế Anh SHOP
         </div>
-        <form class="p-3 mt-3" method="POST" action="{{ route('admin.login') }}">
+        <form class="p-3 mt-3" method="POST" action="/register">
             @csrf
             <div>
-                @if ($errors->any())
+                {{-- @if ($errors->any())
                     <span>
                         @error('Sai')
                             <li>{{ $message }}</li>
                         @enderror
                     </span>
-                @endif
+                @endif --}}
             </div>
             <div class="form-field d-flex align-items-center">
-                <span class="far fa-user"></span>
-                <input type="text" name="userName" id="userName" placeholder="Username" autocomplete="off">
+                {{-- <span class="fa fa-user"> --}}
+                <i class="fa fa-user" aria-hidden="true"></i>
+                {{-- </span> --}}
+                <input type="text" name="name" id="username" placeholder="Tên đăng nhập" autocomplete="off"
+                    required>
             </div>
+            @error('username')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-phone"></span>
+                <input type="type" name="phonenumber" id="phone" placeholder="Số điện thoại " autocomplete="off"
+                    required>
+            </div>
+            @error('phone')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-key"></span>
-                <input type="password" name="password" id="pwd" placeholder="Password" autocomplete="off">
+                <input type="password" name="password" id="pwd" placeholder="Mật khẩu" autocomplete="off"
+                    required>
             </div>
-            <button class="btn mt-3" type="submit">Đăng nhập</button>
+            @error('password')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-email"></span>
+                <input type="email" name="email" id="email" placeholder="Email" autocomplete="off">
+            </div>
+            @error('email')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
+            <button class="btn mt-3 " type="submit">Đăng ký</button>
         </form>
+        {{-- <div class="text-center fs-6 mt-1">
+            <a href="#">Quên mật khẩu</a> hoặc <a href="#">Đăng ký</a>
+        </div> --}}
         <div id="toast-container" class="toast-top-right"></div>
     </div>
+
 </body>
 
 </html>

@@ -163,6 +163,7 @@
                 </div>
             </div>
         </form>
+        <input type="hidden" name="totalAjax" value="{{ $total }}">
     </div>
 @endsection
 @section('script')
@@ -309,27 +310,35 @@
         $('.check-voucher').click(function() {
             const token = $('input[name="_token"]').val();
             $voucherCode = $("#VoucherCode").val();
+            let currentTotal = $('input[name="totalAjax"]').val();
             if ($voucherCode != '') {
                 $.ajax({
                     type: 'post',
                     url: "{{ route('checkvoucher') }}",
                     data: {
                         _token: token,
-                        voucher: $voucherCode
+                        voucher: $voucherCode,
+                        total: currentTotal
                     },
                     success: function(data) {
                         // console.log(data);
                         if (data.code == 200) {
                             $(".voucherMessage").html(data.message);
-                            let currentTotal = $('.totalBill').html().replace(/\./g, '').replace('đ',
-                                '');
-                            console.log(parseFloat(currentTotal));
+
+                            // console.log(parseFloat(currentTotal));
                             let total = parseFloat(currentTotal) - parseFloat(data.data.giamgia);
-                            $('.totalBill').html(total.toLocaleString('vi-VN') + 'đ');
-                            $('input[name="totalmoney"]').val(total);
-                            $('.voucherDiscount').html(data.data.giamgia + 'đ')
+                            if (total > 0) {
+                                $('.totalBill').html(total.toLocaleString('vi-VN') + 'đ');
+                                $('input[name="totalmoney"]').val(total);
+                                $('.voucherDiscount').html(data.data.giamgia + 'đ')
+                            } else {
+                                $('.totalBill').html(0 + 'đ');
+                                $('input[name="totalmoney"]').val(0);
+                                $('.voucherDiscount').html(currentTotal + 'đ')
+                            }
                             $('.cart-coupon').append(
                                 `<input type="hidden" value="${data.data.id}" name="voucher">`)
+
                         } else {
                             $(".voucherMessage").html(data.message);
                         }

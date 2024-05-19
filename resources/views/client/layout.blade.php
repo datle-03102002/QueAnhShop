@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Quế Anh Shop</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
     <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -23,7 +23,113 @@
 <body>
     @csrf
     <div class="main-wrapper">
-        <div class="header-section d-lg-block p-0">
+        <div class="header-mobile d-lg-none sticky">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <div class="header-logo d-none ">
+                            <a href="{{ url('/') }}">
+                                <img src="{{ asset('assets/imgs/logo.jpg') }}" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="header-meta-info">
+                            <div class="header-account">
+
+                                {{-- <div class="header-account-list dropdown top-link"> --}}
+
+                                @if (!Auth::check() || Auth::user()->role != 'khachhang')
+                                    <button class="btn  noborder dropdown-toggle text-primary" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ url('/register') }}">Đăng ký</a></li>
+                                        <li><a href="{{ url('/login') }}">Đăng nhập</a></li>
+                                    </ul>
+                                @else
+                                    <div class="dropdown">
+                                        <button class="btn  noborder dropdown-toggle text-primary" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="">Hồ
+                                                    sơ của tôi
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('ordered') }}">Đơn
+                                                    mua
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('logout') }}">Đăng
+                                                    xuất
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="cart-block">
+                                        <a href="{{ route('giohang') }}">
+                                            <i class="fa-solid fa-cart-shopping w-100 fs-4"></i>
+                                        </a>
+                                    </div>
+                                @endif
+                                {{-- @endif --}}
+
+                                {{-- </div> --}}
+
+                                <div class="header-account-list mobile-menu-trigger ms-2 ">
+                                    <button id="menu-trigger">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-mobile-menu d-lg-none">
+
+            <a href="javascript:void(0)" class="mobile-menu-close">
+                <span></span>
+                <span></span>
+            </a>
+
+            <div class="header-meta-info">
+                <div class="header-search">
+                    <form action="{{ route('locsanpham') }}" method="get">
+                        <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm" autocomplete="off"
+                            class="" style="border:none;background: transparent">
+                        <button class="bg-transparent " style="border:none">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                    {{-- <form type="GET" action="{{ route('locsanpham') }}">
+                        <input type="text" name="keyword" id="search-input" placeholder="Tìm kiếm sản phẩm "
+                            autocomplete="off">
+                        <button class="search-btn"><i class="icon-search"></i></button>
+                    </form> --}}
+                </div>
+            </div>
+
+            <div class="site-main-nav">
+                <nav class="site-nav">
+                    <ul class="navbar-mobile-wrapper">
+                        <li><a href="/">Trang chủ</a></li>
+                        <li><a href="/cuahang">Cửa hàng</a></li>
+                        <li><a href="">Tin tức</a></li>
+                        <li><a href="">Liên hệ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="header-section d-lg-block p-0 d-none ">
             <div class="main-header">
                 <div class="container position-relative ">
                     <div class="row align-items-center ">
@@ -47,24 +153,9 @@
                                             <a href="{{ url('/cuahang') }}">
                                                 Cửa hàng
                                             </a>
-                                            {{-- <ul class="mega-sub-menu ">
-                                                <li
-                                                    class="mega-dropdown menu-item-has-children nav-item position-absolute ">
-                                                    <a href="">Danh Mục</a>
-                                                    <ul class="nav navbar-nav  ">
-                                                        @foreach ($category as $item)
-                                                            <li class="nav-item">{{ $item->name }}</li>
-                                                        @endforeach
-
-                                                    </ul>
-                                                </li>
-                                            </ul> --}}
                                         </li>
                                         <li class="nav-item mx-2 ">
                                             <a href="{{ url('tin-tuc') }}">Tin tức</a>
-                                        </li>
-                                        <li class="nav-item mx-2 ">
-                                            <a href="{{ url('ve-chung-toi') }}">Về chúng tôi</a>
                                         </li>
                                         <li class="nav-item mx-2 ">
                                             <a href="{{ url('lienhe') }}">Liên hệ</a>
@@ -91,10 +182,17 @@
                                 <div class="header-account d-flex ">
                                     <div class="header-user">
                                         @if (!Auth::check() || Auth::user()->role != 'khachhang')
-                                            <a href="{{ route('login') }}"
-                                                class="link-underline link-underline-opacity-0 col-6">Đăng
-                                                nhập
-                                            </a>
+                                            <div class="d-flex ">
+                                                <a href="{{ route('login') }}"
+                                                    class="link-underline link-underline-opacity-0 col-6">Đăng
+                                                    nhập
+                                                </a>
+                                                <span>/</span>
+                                                <a href="{{ route('register') }}"
+                                                    class="link-underline link-underline-opacity-0 col-6">Đăng
+                                                    ký
+                                                </a>
+                                            </div>
                                         @else
                                             <div class="dropdown">
                                                 <button class="btn  noborder dropdown-toggle text-primary"
@@ -108,7 +206,8 @@
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item" href="{{ route('ordered') }}">Đơn mua
+                                                        <a class="dropdown-item" href="{{ route('ordered') }}">Đơn
+                                                            mua
                                                         </a>
                                                     </li>
                                                     <li>
@@ -125,6 +224,7 @@
                                             <i class="fa-solid fa-cart-shopping w-100 fs-4"></i>
                                         </a>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -147,15 +247,22 @@
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
 </script> --}}
 {{-- <script src="{{ asset('assets/vendor/purecounter/purecounter_vanilla.js') }}"></script> --}}
-<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 {{-- <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script> --}}
-<script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
-<script src="{{ asset('assets/js/main.js') }}"></script>
+{{-- <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/js/main.js') }}"></script> --}}
+<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+    $('#menu-trigger').click(function() {
+        $(".header-mobile-menu").addClass('open');
+    })
+    $(".mobile-menu-close").click(function() {
+        $(".header-mobile-menu").removeClass('open');
+
+    })
     // goi y tim kiem
     $('input[name="keyword"]').on('keyup', function() {
         // console.log('a');
@@ -178,12 +285,16 @@
     $('input[name="keyword"]').on('blur', function() {
         $('.search-product').fadeOut();
     });
-    const swiperNewProduct = new Swiper(".newProduct", {
+
+    const blog = new Swiper(".blog-active", {
+
+
         watchSlidesProgress: true,
         slidesPerView: 4,
         spaceBetween: 30,
         centeredSlides: true,
         loop: true,
+        speed: 800,
         autoplay: {
             delay: 2500,
             disableOnInteraction: false,
@@ -196,6 +307,56 @@
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
         },
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+            },
+            576: {
+                slidesPerView: 2,
+            },
+            768: {
+                slidesPerView: 3,
+            },
+            992: {
+                slidesPerView: 4,
+            },
+        }
+    });
+    const swiperNewProduct = new Swiper(".newProduct", {
+
+
+        watchSlidesProgress: true,
+        slidesPerView: 4,
+        spaceBetween: 30,
+        centeredSlides: true,
+        loop: true,
+        speed: 800,
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+            },
+            576: {
+                slidesPerView: 2,
+            },
+            768: {
+                slidesPerView: 3,
+            },
+            992: {
+                slidesPerView: 4,
+            },
+        }
     });
     var swiperBanner = new Swiper('.slider-active', {
         speed: 800,
@@ -218,6 +379,7 @@
             el: '.swiper-pagination',
             clickable: true,
         },
+
     });
     // var swiper = new Swiper(".mySwiper", {
     //     watchSlidesProgress: true,

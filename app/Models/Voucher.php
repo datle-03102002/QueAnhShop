@@ -9,4 +9,8 @@ class Voucher extends Model
 {
     use HasFactory;
     protected $table = 'voucher';
+    public $timestamps = false;
+
+    // protected $timestamp = false;
 }
+

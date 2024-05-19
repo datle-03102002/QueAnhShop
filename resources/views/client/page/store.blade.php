@@ -8,7 +8,7 @@
     </style>
 @endsection
 @section('content')
-    <div class="container">
+    <div class="container mt-md-5  pt-md-2  ">
         <div class="row">
             <div class="col-lg-3">
                 <h3 class="text-uppercase ">bộ lọc tìm kiếm</h3>

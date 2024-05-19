@@ -21,6 +21,14 @@ class Homecontroller extends Controller
         
         
         $product = Product::with('images')->where('status',1)->get();
+        // $product2 = Product::join('orderdetail', 'orderdetail.product_id', '=', 'products.id')
+        //             ->selectRaw('COUNT(orderdetail.product_id) as count,products.*')
+        //             ->groupBy('products.id')
+        //             ->groupBy('products.category_id')
+        //             ->orderBy('count','desc')->get();
+        //             dd($product2);
+                    // ->having('count');
+        $product3 = Product::with('images')->where('status',1)->get();
         $post = Post::where('status',1)->get();
         // dd($product[0]->images);
         return view('client.page.index',compact('product','post'));

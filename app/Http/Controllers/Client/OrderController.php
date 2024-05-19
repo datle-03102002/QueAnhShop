@@ -33,7 +33,7 @@ class OrderController extends Controller
         return view('client.page.thanhtoan',compact('cart'));
     }
     public function checkout(Request $request){
-        dd($request);
+        // dd($request);
         $code = rand(0,9999) +1;
         $cart = Cart::where('user_id',Auth::id())->get();
         // $tong =0 ;
@@ -53,7 +53,8 @@ class OrderController extends Controller
                 $order->user_id = Auth::id();
                 $order->status = 'Chờ xác nhận';
                 if($request->has('voucher')){
-                    $voucher = Voucher::find('id');
+                    $voucher = Voucher::find($request->voucher);
+                    // dd($voucher);
                     $voucher->solandadung +=1;
                     $voucher->save();
                 }
@@ -75,7 +76,7 @@ class OrderController extends Controller
                         $od->size = $item->size;
                         $od->color = $item->color;
                         $od->quantity = $item->quantity;
-                        $od->save();
+                        // $od->save();
                         // dd($od);
                         
                         // lấy ra thông tin của sản phẩm có size và màu đàng mua để cập nhật số lượng 
@@ -93,6 +94,8 @@ class OrderController extends Controller
                         $product = Product::find($item->product_id);
                         $product->stock -= $item->quantity;
                         $product->save();
+                        $od->price = $product->price;
+                        $od->save();
                     } catch (\Throwable $th) {
                         Log::error($th);
                         DB::rollback(); 
@@ -103,7 +106,7 @@ class OrderController extends Controller
                 Cart::where('user_id', Auth::id())->delete();
                 // $cart->delete();
                 toastr()->success('Đặt hàng thành công');
-                return redirect()->route('home');
+                return redirect()->route('ordered');
             } catch (Throwable  $e) {
                 var_dump($e);
                 DB::rollback();
@@ -174,6 +177,7 @@ class OrderController extends Controller
                 if($voucherId != ''){
                     $voucher = Voucher::find($voucherId);
                     if ($voucher) {
+                        // dd($voucher);
                         $voucher->solandadung += 1;
                         $voucher->save();
                     }
@@ -196,7 +200,6 @@ class OrderController extends Controller
                         $od->size = $item->size;
                         $od->color = $item->color;
                         $od->quantity = $item->quantity;
-                        $od->save();
                         if($prod->quantity - $item->quantity <0){
                             // dd('oke');
                             // toastr()->error('Bạn không có quyền');
@@ -209,6 +212,8 @@ class OrderController extends Controller
                         $product = Product::find($item->product_id);
                         $product->stock -= $item->quantity;
                         $product->save();
+                        $od->price = $product->price;
+                        $od->save();
                         
                     } catch (\Throwable $th) {
                         //throw $th;
@@ -221,7 +226,7 @@ class OrderController extends Controller
                 toastr()->success('Đặt hàng thành công');
                 Cart::where('user_id', Auth::id())->delete();
 
-                return redirect()->route('home');
+                return redirect()->route('ordered');
                 } catch (Throwable  $e) {
                     var_dump($e);
                     DB::rollback();
@@ -637,8 +642,13 @@ class OrderController extends Controller
     public function checkvoucher(Request $request){
         $vouchercode = $request->voucher;
         $voucher= Voucher::where('ma',$vouchercode)->first();
+        // dd($voucher<=$request->total);
+        
         if(!$voucher){
             return response()->json(['code'=>201,'message'=>'Voucher không đúng']);
+        }
+        if($voucher->dongiatoithieu >= $request->total){
+            return response()->json(['code'=>201,'message'=>"Đơn hàng tối thiểu $voucher->dongiatoithieu"."đ mới được sử dụng"]);
         }
         if($voucher->ngayhethan <Carbon::now()){
             // dd(Carbon::now());
@@ -647,6 +657,7 @@ class OrderController extends Controller
         if($voucher->solandasudung >= $voucher->solansudung){
             return response()->json(['code'=>201,'message'=>'Voucher đã hết lượt sử dụng']);
         }
+        
         $data = [
             'id'=>$voucher->id,
             'giamgia'=>$voucher->sotiengiam

@@ -18,7 +18,7 @@
             left: 10px;
             transform: translate(0, -50%);
             /* animation: opac 0.5s ease-in-out;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                animation-iteration-count: infinite; */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    animation-iteration-count: infinite; */
         }
 
         .list-image .next {
@@ -269,11 +269,11 @@
                         Thêm vào giỏ hàng
                     </button>
                 </div>
-                <div>
+                {{-- <div>
                     <button class="btn btn-primary mt-3">
                         Mua ngay
                     </button>
-                </div>
+                </div> --}}
 
             </div>
         </div>

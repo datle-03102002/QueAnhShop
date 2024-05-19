@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 return new class extends Migration
 {
@@ -15,11 +16,11 @@ return new class extends Migration
             $table->id();
             $table->double('dongiatoithieu')->default(0);
             $table->string('ma');
-            $table->date('ngaytao');
-            $table->date('ngayhethan');
+            $table->dateTime('ngaytao');
+            $table->dateTime('ngayhethan');
             $table->double('sotiengiam');
             $table->integer('solansudung');
-            $table->integer('solandadung');
+            $table->integer('solandadung')->default(0);
             // $table->timestamps();
         });
     }

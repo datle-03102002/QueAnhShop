@@ -73,4 +73,22 @@ class CartController extends Controller
             return response()->json(['status'=>false,'message'=>'Có lỗi']);
         }
     }
+    public function updatequantity(Request $request){
+        try {
+            $newQuantity = $request->newQuantity;
+            $id = $request->id;
+            $cartItem = Cart::find($id);
+            $cartItem->quantity = $newQuantity;
+            $cartItem->save();
+            return response()->json(['data'=>200]);
+        } catch (\Throwable $th) {
+            return response()->json(['data'=>201]);
+            
+        }
+        // dd($newQuantity);
+    }
+    public function emptyCart(){
+        Cart::where('user_id',Auth::id())->delete();
+        return  redirect()->back();
+    }
 }

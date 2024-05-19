@@ -20688,6 +20688,7 @@ input:focus {
     outline: none;
 }
 
+/* 
 @font-face {
     font-family: 'Karla';
     src: url("../fonts/karla/Karla-Bold.eot");
@@ -20702,7 +20703,7 @@ input:focus {
     src: url("../fonts/karla/Karla-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/karla/Karla-Regular.woff2") format("woff2"), url("../fonts/karla/Karla-Regular.woff") format("woff"), url("../fonts/karla/Karla-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
-}
+} */
 
 .bg-twitter {
     background: #2caae1;

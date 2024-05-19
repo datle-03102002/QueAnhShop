@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Address;
 use App\Models\User;
 use Session;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+
 
 
 class AuthController extends Controller
@@ -40,6 +43,47 @@ class AuthController extends Controller
     function logout(){
         Auth::logout();
         return redirect()->route('home');
+    }
+    function register(Request $request){
+        // dd('oke');
+        // dd(Carbon::now());
+        $data = $request->validate([
+            'name'=> 'required|unique:users|min:6',
+            'phonenumber'=> 'required|unique:users|min:10',
+            'password'=> 'required|min:6',
+            'email'=> 'required|unique:users|email',
+        ],[
+            'name.required'=>'Tên đăng nhập không được để trống',
+            'name.unique'=>'Tên đăng nhập đã được sử dụng',
+            'name.min'=>'Tên đăng nhập phải ít nhất 6 ký tự',
+            'phonenumber.required'=>'Số điện thoại không được để trống',
+            'phonenumber.unique'=>'Số điện thoại đã được sử dụng',
+            'phonenumber.min'=>'Số điện thoại phải có 10 số',
+            'password.required'=>'Mật khẩu không được để trống',
+            'password.min'=>'Mật khẩu ít nhất 6 ký tự',
+            'email.required'=>'Email không được để trống',
+            'email.unique'=>'Email đã được sử dụng',
+            'email.email'=>'Trường này phải là email',
+        ]);
+        // dd('a');
+        // $data = $request->all();
+        try {
+            $user = new User;
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->password = Hash::make($data['password']);
+            $user->created_at = Carbon::now();
+            $user->phonenumber = $data['phonenumber'];
+            $user->save();
+            toastr()->success('Đăng ký tài khoản thành công');
+            return redirect('/login');
+        } catch (\Throwable $th) {
+            // throw $th;
+            toastr()->error('Có lỗi khi tạo tài khoản. Vui lòng thử lại');
+            return redirect()->back();
+        }
+        
+
     }
     public function addAddress(Request $request){
         try {

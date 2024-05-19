@@ -158,11 +158,10 @@
             <button class="btn mt-3 " type="submit">Đăng nhập</button>
         </form>
         <div class="text-center fs-6 mt-1">
-            <a href="#">Quên mật khẩu</a> hoặc <a href="#">Đăng ký</a>
+            <a href="#">Quên mật khẩu</a> hoặc <a href="/register">Đăng ký</a>
         </div>
         <div id="toast-container" class="toast-top-right"></div>
     </div>
-
 </body>
 
 </html>

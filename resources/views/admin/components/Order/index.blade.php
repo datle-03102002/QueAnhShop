@@ -1,6 +1,72 @@
 @extends('admin.components.dashboard')
 @section('style')
     <style>
+        .model {
+            top: 0;
+            display: none;
+            z-index: 999;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+
+        }
+
+        .model.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .model .model-content {
+            height: auto;
+            width: 400px;
+            text-align: center;
+            background-color: white;
+            border: 1px solid black;
+            padding-top: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 20px;
+            position: relative;
+            animation: showmodel 0.3s ease-in-out;
+            /* animation-iteration-count: infinite; */
+        }
+
+        @keyframes showmodel {
+            0% {
+                scale: 0;
+
+            }
+
+            25% {
+                scale: 0.25;
+            }
+
+            50% {
+                scale: 0.5;
+            }
+
+            75% {
+                scale: 0.75;
+            }
+
+            100% {
+                scale: 1;
+            }
+        }
+
+
+        .model .model-content .exit {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            z-index: 999;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
         .order-item .nosuccess {
             background-color: #FF9900;
             padding: 5px;
@@ -128,16 +194,20 @@
 
                         </td>
                         <td>
-                            {{ $item->user->email }}
+                            {{ $item->user->phonenumber }}
                         </td>
                         <td>
                             {{ number_format($item->totalMoney, 0, ',', '.') }}đ
                         </td>
                         @if (mb_strtoupper($item->status) == 'CHỜ XÁC NHẬN')
-                            <td>
-                                <button class="btn btn-sm btn-primary text-white "
+                            <td class="d-flex">
+                                <button class="btn btn-sm btn-primary text-white me-1"
                                     onclick="changeStatusOrder('{{ $item->id }}','{{ mb_strtoupper($item->status) }}')">
                                     Xác nhận đơn
+                                </button>
+                                <button class="btn btn-sm btn-primary btn-danger   text-white "
+                                    onclick="showModelDeleteOrder('{{ $item->id }}')">
+                                    Hủy đơn
                                 </button>
                             </td>
                         @elseif (mb_strtoupper($item->status) == 'ĐANG GIAO HÀNG')
@@ -160,6 +230,7 @@
                 @endforeach
             </tbody>
         </table>
+
     </div>
 @endsection
 @section('script')
@@ -180,6 +251,51 @@
                     }
                 }
             })
+        }
+
+        function showModelDeleteOrder(id) {
+            let html = `<span class="exit" onclick="closeModel()">
+                                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        </span>
+                        <div>
+                            <div class="form-group">
+                                <label for="" class="form-label ">Lý do hủy đơn hàng</label>
+                                <input type="text" name="lydo" class="form-control " placeholder="Lý do hủy ">
+                            </div>
+                            <div>
+                                <button class="btn-sm btn-primary border-2 " onclick="deleteOrder(${id})">Xác nhận hủy</button>
+                            </div>
+                        </div>
+
+                        `;
+            document.querySelector(".model-content").innerHTML += html;
+            document.querySelector(".model").classList.add('active')
+        }
+
+        function deleteOrder(id) {
+            let token = $('input[name="_token"]').val();
+            let cancelReson = $('input[name="lydo"]').val();
+            // console.log(cancelReson);
+            if (cancelReson != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '/deleteOrder',
+                    data: {
+                        _token: token,
+                        id: id,
+                        cancelReson: cancelReson
+                    },
+                    success: function(data) {
+                        if (data.code == 200) {
+                            window.location.reload();
+                        } else {
+                            swal('Có lỗi khi hủy đơn hàng');
+                        }
+                    }
+                })
+            } else {
+                $('input[name="lydo"]').focus();
+            }
         }
     </script>
 @endsection

@@ -9,12 +9,14 @@ use App\Http\Controllers\ADMIN\ProductController as AdminProductController;
 use App\Http\Controllers\ADMIN\CategoryController as AdminCategoryController;
 use App\Http\Controllers\ADMIN\OrderController as AdminOrderController;
 use App\Http\Controllers\ADMIN\PostController;
+use App\Http\Controllers\ADMIN\VoucherController;
 
 
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\OrderController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +33,11 @@ Route::get('/', [ClientHomeController::class,'index'])->name('home');
 Route::get('/login', function (){
     return view('client.page.auth.login');
 });
+Route::get('/register', function (){
+    return view('client.page.auth.register');
+});
 Route::post('/login', [AuthController::class,'login'])->name('login');
+Route::post('/register', [AuthController::class,'register'])->name('register');
 Route::get('/logout', [AuthController::class,'logout'])->name('logout');
 Route::post('goiytimkiem',[ClientHomecontroller::class,'goiysearch']);
 Route::post('/add-address',[AuthController::class,'addAddress']);
@@ -45,6 +51,7 @@ Route::get('/chitietdonhang/{id}',[OrderController::class,'detailOrder'])->name(
 Route::get('/danhanhang/{id}',[OrderController::class,'danhanhang'])->name('danhanhang');
 Route::post('/comment', [OrderController::class,'postcomment'])->name('comment');
     Route::get('/post/{slug}',[Homecontroller::class,'post'])->name('post.detail');
+    Route::get('/emptyCart',[CartController::class,'emptyCart'])->name('emptyCart');
 
 Route::middleware('api')->group(function(){
     Route::get('/getaddress', [AuthController::class,'getAddress'])->name('getaddress');
@@ -61,6 +68,7 @@ Route::middleware('api')->group(function(){
 Route::post('/addToCart', [CartController::class,'addToCart']);
 Route::get('/giohang',[CartController::class,'index'])->name('giohang');
 Route::post('/deleteCartItem',[CartController::class, 'deleteCartItem']);
+Route::post('/updatequantity',[CartController::class, 'updatequantity'])->name('updatequantity');
 
 // Order 
 Route::get('/donhangcuatoi',[OrderController::class,'ordered'])->name('ordered');
@@ -109,5 +117,9 @@ Route::middleware(['adminLogin'])->prefix('admin')->group(function () {
     //post
     Route::resource('post',PostController::class);
     Route::post('/post/xoa',[PostController::class,'xoa'])->name('post.delete');
+
+    //voucher
+    Route::resource('voucher', VoucherController::class);
+    Route::post('voucher/delete', [VoucherController::class,'deleteVoucher'])->name('voucher.delete');
 });
 

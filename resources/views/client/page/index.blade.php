@@ -117,12 +117,12 @@
     </div>
 
     {{-- product-recommend --}}
-    <div class="new-product-area " style="padding: 90px;">
+    <div class="new-product-area section-padding-2">
         <div class="container ">
-            <div class="row d-flex justify-content-center ">
-                <div class="col-6 ">
-                    <div class="section-title text-center ">
-                        <h2>Gợi Ý Cho Bạn</h2>
+            <div class="row  justify-content-center ">
+                <div class="col-6 col-md-9 col-sm-11 w-100">
+                    <div class="section-title text-center  ">
+                        <h2 class="title">Gợi Ý Cho Bạn</h2>
                         <p>A perfect blend of creativity, energy, communication, happiness and love. Let us arrange
                             a smile for you.</p>
                     </div>
@@ -173,32 +173,75 @@
     </div>
 
     {{-- San pham moi --}}
-    <div class="container" style="padding: 90px;">
-        <div class="row d-flex justify-content-center ">
-            <div class="col-6 ">
-                <div class="section-title text-center ">
-                    <h2>Sản phẩm mới</h2>
-                    <p>A perfect blend of creativity, energy, communication, happiness and love. Let us arrange
-                        a smile for you.</p>
+    <div class="features-product-area section-padding-5">
+        <div class="container" style="padding: 90px;">
+            <div class="row d-flex justify-content-center ">
+                <div class="col-6 col-md-9 col-sm-11 w-100">
+                    <div class="section-title text-center">
+                        <h2 class="title">Sản phẩm mới</h2>
+                        <p>A perfect blend of creativity, energy, communication, happiness and love. Let us arrange
+                            a smile for you.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div role="tabpanel" class="mt-4">
-            <!-- List group -->
-            <div class="list-group d-flex container flex-row justify-content-center" style="min-width:450px;"
-                id="myList" role="tablist">
-                <a class="list-group-item title list-group-item-action active" style="border:none;" data-bs-toggle="list"
-                    href="#banchay" role="tab">Bán chạy</a>
-                <a class="list-group-item title list-group-item-action" style="border:none;" data-bs-toggle="list"
-                    href="#noibat" role="tab">Nổi bật</a>
-                <a class="list-group-item title list-group-item-action" style="border:none;" data-bs-toggle="list"
-                    href="#dangsale" role="tab">Đang sale</a>
-            </div>
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div class="tab-pane active" id="banchay" role="tabpanel">
-                    <div class="container ">
+            <div role="tabpanel" class="mt-4">
+                <!-- List group -->
+                <div class="list-group d-flex container flex-row justify-content-center" id="myList" role="tablist">
+                    <a class="list-group-item title list-group-item-action active p-sm-0 " style="border:none;"
+                        data-bs-toggle="list" href="#banchay" role="tab">Bán chạy</a>
+                    <a class="list-group-item title list-group-item-action p-sm-0 " style="border:none;"
+                        data-bs-toggle="list" href="#noibat" role="tab">Nổi bật</a>
+                    <a class="list-group-item title list-group-item-action p-sm-0 " style="border:none;"
+                        data-bs-toggle="list" href="#dangsale" role="tab">Đang sale</a>
+                </div>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="banchay" role="tabpanel">
+                        <div class="container ">
 
+                            <div class="swiper newProduct">
+                                <div class="swiper-wrapper">
+                                    @foreach ($product as $key => $item)
+                                        <div class="swiper-slide">
+                                            <div class="single-product">
+                                                <div class="product-image">
+                                                    <a href="">
+                                                        <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}"
+                                                            alt="">
+                                                    </a>
+                                                    <div class="action-links">
+                                                        <ul>
+                                                            <li>
+                                                                <a class="product-detail"
+                                                                    href="{{ route('chitietsanpham', ['name' => $item->slug]) }}"><i
+                                                                        class="fa fa-eye" aria-hidden="true"></i></a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="add-to-cart" href=""><i
+                                                                        class="fa fa-cart-plus"
+                                                                        aria-hidden="true"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content">
+                                                    <h4 class="product-name">
+                                                        {{ $item->name }}
+                                                    </h4>
+                                                    <div class="price-box">
+                                                        <span
+                                                            class="current-price">{{ number_format($item->price, 0, ',', '.') }}
+                                                            đ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="noibat" role="tabpanel">
                         <div class="swiper newProduct">
                             <div class="swiper-wrapper">
                                 @foreach ($product as $key => $item)
@@ -238,9 +281,48 @@
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane" id="dangsale" role="tabpanel">
+                        <div class="swiper newProduct">
+                            <div class="swiper-wrapper">
+                                @foreach ($product as $key => $item)
+                                    <div class="swiper-slide">
+                                        <div class="single-product">
+                                            <div class="product-image">
+                                                <a href="">
+                                                    <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}"
+                                                        alt="">
+                                                </a>
+                                                <div class="action-links">
+                                                    <ul>
+                                                        <li>
+                                                            <a class="product-detail"
+                                                                href="{{ route('chitietsanpham', ['name' => $item->slug]) }}"><i
+                                                                    class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="add-to-cart" href=""><i
+                                                                    class="fa fa-cart-plus" aria-hidden="true"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="product-content">
+                                                <h4 class="product-name">
+                                                    {{ $item->name }}
+                                                </h4>
+                                                <div class="price-box">
+                                                    <span
+                                                        class="current-price">{{ number_format($item->price, 0, ',', '.') }}
+                                                        đ</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="tab-pane" id="noibat" role="tabpanel">...</div>
-                <div class="tab-pane" id="dangsale" role="tabpanel">...</div>
             </div>
         </div>
     </div>
@@ -249,7 +331,7 @@
     <div class="blog-area blog-bg section-padding-5">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-9 col-sm-11">
+                <div class="col-lg-6 col-md-9 col-sm-11 w-100">
                     <div class="section-title text-center">
                         <h2 class="title">Bài Viết Của Chúng Tôi</h2>
                         <p>A perfect blend of creativity, energy, communication, happiness and love. Let us arrange a
@@ -261,72 +343,30 @@
                 <div class="swiper-container blog-active swiper-container-initialized swiper-container-horizontal">
                     <div class="swiper-wrapper" aria-live="polite">
                         @foreach ($post as $item)
-                            <div class="single-blog">
-                                <div class="blog-image">
-                                    <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
-                                            src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
-                                </div>
-                                <div class="blog-content">
-                                    <h4 class="title"><a
-                                            href="{{ route('post.detail', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
-                                    </h4>
-                                    <div class="articles-date">
-                                        <p><span>{{ $item->created_at }}</span></p>
+                            <div class="swiper-slide">
+
+                                <div class="single-blog">
+                                    <div class="blog-image">
+                                        <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
+                                                src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
                                     </div>
-                                    {{-- <div class="four-line mb-4">
+                                    <div class="blog-content">
+                                        <h4 class="title"><a
+                                                href="{{ route('post.detail', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                                        </h4>
+                                        <div class="articles-date">
+                                            <p><span>{{ $item->created_at }}</span></p>
+                                        </div>
+                                        {{-- <div class="four-line mb-4">
                                         <p>{{ $item->description }}</p>
                                     </div> --}}
 
-                                    <div class="blog-footer">
-                                        <a class="more" href="{{ route('post.detail', ['slug' => $item->slug]) }}">Tìm
-                                            hiểu thêm</a>
-                                        <!-- <p class="comment-count"><i class="icon-message-circle"></i> 0</p> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="single-blog">
-                                <div class="blog-image">
-                                    <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
-                                            src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
-                                </div>
-                                <div class="blog-content">
-                                    <h4 class="title"><a
-                                            href="{{ route('post.detail', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
-                                    </h4>
-                                    <div class="articles-date">
-                                        <p><span>{{ $item->created_at }}</span></p>
-                                    </div>
-                                    {{-- <div class="four-line mb-4">
-                                        <p>{{ $item->description }}</p>
-                                    </div> --}}
-
-                                    <div class="blog-footer">
-                                        <a class="more" href="{{ route('post.detail', ['slug' => $item->slug]) }}">Tìm
-                                            hiểu thêm</a>
-                                        <!-- <p class="comment-count"><i class="icon-message-circle"></i> 0</p> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="single-blog">
-                                <div class="blog-image w-100 ">
-                                    <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
-                                            src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
-                                </div>
-                                <div class="blog-content">
-                                    <h4 class="title"><a
-                                            href="{{ route('post.detail', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
-                                    </h4>
-                                    <div class="articles-date">
-                                        <p><span>{{ $item->created_at }}</span></p>
-                                    </div>
-                                    {{-- <div class="four-line mb-4">
-                                        <p>{{ $item->description }}</p>
-                                    </div> --}}
-
-                                    <div class="blog-footer">
-                                        <a class="more" href="{{ route('post.detail', ['slug' => $item->slug]) }}">Tìm
-                                            hiểu thêm</a>
-                                        <!-- <p class="comment-count"><i class="icon-message-circle"></i> 0</p> -->
+                                        <div class="blog-footer">
+                                            <a class="more"
+                                                href="{{ route('post.detail', ['slug' => $item->slug]) }}">Tìm
+                                                hiểu thêm</a>
+                                            <!-- <p class="comment-count"><i class="icon-message-circle"></i> 0</p> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>

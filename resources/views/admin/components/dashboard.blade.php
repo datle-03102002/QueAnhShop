@@ -6,15 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Quế Anh Shop</title>
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/feather.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/flag-icon.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/vendor.bundle.base.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @yield('head')
     @yield('style')
@@ -28,41 +24,29 @@
 <body class="">
     @csrf
     <div class="container-fluid" style="padding: 0 !important;">
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center text-white ">
-                QUẾ ANH SHOP
+        <div class="header-account-list mobile-menu-trigger ms-2 d-sm-block d-lg-none">
+            <button id="menu-trigger">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="header-mobile-menu d-lg-none d-sm-none ">
+
+            <a href="javascript:void(0)" class="mobile-menu-close">
+                <span></span>
+                <span></span>
+            </a>
+            <div class="site-main-nav">
+                <nav class="site-nav">
+                    <ul class="navbar-mobile-wrapper">
+                        <li><a href="/">Trang chủ</a></li>
+                        <li><a href="/cuahang">Cửa hàng</a></li>
+                        <li><a href="">Tin tức</a></li>
+                        <li><a href="">Liên hệ</a></li>
+                    </ul>
+                </nav>
             </div>
-            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-                <button class="navbar-toggler navbar-toggler align-self-center btn-menu" type="button"
-                    data-toggle="minimize">
-                    <span class="icon-menu"></span>
-                </button>
-
-                <ul class="navbar-nav navbar-nav-right">
-
-
-                    <li class="nav-item dropdown d-flex mr-4 ">
-                        <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center"
-                            id="notificationDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="icon-cog"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-                            aria-labelledby="notificationDropdown">
-
-                            <a href="{{ route('admin.logout') }}" class="dropdown-item preview-item">
-                                <i class="icon-inbox"></i> Logout
-                            </a>
-                        </div>
-                    </li>
-
-                </ul>
-                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-                    data-toggle="offcanvas">
-                    <span class="icon-menu"></span>
-                </button>
-            </div>
-        </nav>
-        <div class="container-fluid page-body-wrapper">
+        </div>
+        <div class="container-fluid page-body-wrapper p-0">
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <div class="user-profile">
                     <div class="user-image">
@@ -108,6 +92,20 @@
                             <span class="menu-title">Bài viết</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('voucher.index') }}">
+                            <i class="icon-pie-graph menu-icon"></i>
+                            <span class="menu-title">Khuyến mãi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.logout') }}" class="nav-link">
+                            {{-- <i class="icon-inbox"></i> --}}
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <span class="menu-title">Logout</span>
+                        </a>
+                    </li>
+
                 </ul>
             </nav>
             <main class="container overflow-y-auto ">
@@ -115,6 +113,11 @@
             </main>
         </div>
     </div>
+    <div class="model  ">
+        <div class="model-content">
+        </div>
+    </div>
+</body>
 
 </html>
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>

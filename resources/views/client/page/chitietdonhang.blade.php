@@ -59,7 +59,13 @@
                     </tbody>
                 </table>
             </div>
-
+            <div class="row">
+                <div>
+                    Lưu ý: <span class="fw-bold ">Vui lòng kiểm tra hàng trước khi nhận hàng. Chúng tôi sẽ không chịu trách
+                        nhiệm sau khi bạn đã
+                        nhận hàng </span>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="cart-totals shop-single-content">

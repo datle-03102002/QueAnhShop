@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -35,69 +36,71 @@ class HomeController extends Controller
 
     public function dashboard()
 {
-    $startDate = Carbon::now()->subDays(7);
-    $endDate = Carbon::now();
+    $startDate = Carbon::now()->subDays(8);
+    $endDate = Carbon::now()->subDays(1);
 
-    $products = Product::all();
-    $data = [];
-    $data1 = [];
-
-    foreach ($products as $product) {
-    //     $salesData = OrderDetail::with(['order' => function ($query) use ($startDate, $endDate) {
-    //     $query->whereBetween('orderDate', [$startDate, $endDate]);
-    // }])
-    // ->where('product_id', $product->id)
-    // ->selectRaw('DATE(order.orderDate) as date, SUM(orderdetail.quantity) as total_quantity')
-    // ->groupBy('date')
-    // ->get()
-    // ->pluck('total_quantity', 'date')
-    // ->toArray();
-        $salesData = OrderDetail::join('order', 'orderdetail.order_id', '=', 'order.id')
-                    ->where('orderdetail.product_id', $product->id)
-                    ->whereBetween('order.orderDate', [$startDate, $endDate])
-                    ->selectRaw('DATE(order.orderDate) as date, SUM(orderdetail.quantity) as total_quantity')
-                    ->groupBy('date')
-                    ->get()
-                    ->pluck('total_quantity', 'date')
-                    ->toArray();
-        $salesData1 = OrderDetail::join('order', 'orderdetail.order_id', '=', 'order.id')
-                    ->where('orderdetail.product_id', $product->id)
-                    ->whereBetween('order.orderDate', [$startDate, $endDate])
-                    ->selectRaw('DATE(order.orderDate) as date, SUM(orderdetail.quantity *10000) as total_quantity')
-                    ->groupBy('date')
-                    ->get()
-                    ->pluck('total_quantity', 'date')
-                    ->toArray();
-
-        $data[] = [
-            'label' => $product->name,
-            'data' => $this->fillMissingDates($startDate, $endDate, $salesData),
-        ];
-        $data1[] = [
-            'label' => $product->name,
-            'data' => $this->fillMissingDates($startDate, $endDate, $salesData1),
-        ];
+    // $products = Product::all();
+    $category = Category::all();
+    $data =[];
+    foreach ($category as $key => $item) {
+        if(!array_key_exists($item['name'], $data)){
+            $newData =  $this->fillMissingDates($startDate,$endDate,$item['name']);
+            $data[$item['name']] = $newData;
+        }
     }
+    $salesData = OrderDetail::join('order', 'orderdetail.order_id', '=', 'order.id')
+                ->join('products', 'orderdetail.product_id', '=', 'products.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                // ->where('orderdetail.product_id', $product->id)
+                ->whereBetween('order.orderDate', [$startDate, $endDate])
+                ->selectRaw('categories.name as category_name,DATE(order.orderDate) as date, SUM(orderdetail.quantity) as total_quantity')
+                ->groupBy('category_name')
+                ->groupBy('date')
+                ->get();
+    foreach ($salesData as $index => $item) {
+        // dd(array_key_exists($item['date'],$data[$item['category_name']]['data']));
 
-    $labels = $this->getDateRange($startDate, $endDate);
-    foreach ($labels as $key => $label) {
-        $labels[$key] = $label->format('d/m');
+        if(array_key_exists($item['category_name'],$data)){
+            // print_r($data[$item['category_name']]['data']);
+            // var_dump($item['date']);
+            if(array_key_exists($item['date'],$data[$item['category_name']]['data'])){
+                // var_dump($item['total_quantity']);
+                $data[$item['category_name']]['data'][$item['date']] = (int) $item['total_quantity'];
+            }
+        }
     }
-    // dd($da);
-    return view('admin.components.home',compact('data','labels','data1'));
+    $hotProduct = OrderDetail::join('order', 'orderdetail.order_id', '=', 'order.id')
+                ->join('products', 'orderdetail.product_id', '=', 'products.id')
+                ->whereBetween('order.orderDate', [$startDate, $endDate])
+                ->selectRaw('COUNT(orderdetail.product_id) as count, products.name,sum(orderdetail.quantity) as soluong, sum(orderdetail.quantity * orderdetail.price) as doanhthu')
+                ->groupby('products.name')
+                ->orderBy('count','desc')->get();
+                // dd($hotProduct);
+    return view('admin.components.home',compact('data','hotProduct'));
 }
 
-private function fillMissingDates($startDate, $endDate, $salesData)
+private function fillMissingDates($startDate, $endDate,$label)
 {
     $dateRange = $this->getDateRange($startDate, $endDate);
-    $filledData = [];
+    $newData =[];
+    $filledData = [
+
+    ];
 
     foreach ($dateRange as $date) {
         $formattedDate = $date->format('Y-m-d');
-        $filledData[$formattedDate] = $salesData[$formattedDate] ?? 0;
+        // dd($formattedDate);
+        $newData[$formattedDate]= 0;
     }
+    // dd($filledData);
+    $filledData = [
+            'label'=>$label,
+            'data'=>$newData
+        
+    ];
+    // dd(count($filledData));
 
-    return array_values($filledData);
+    return $filledData;
 }
 
 private function getDateRange($startDate, $endDate)
@@ -112,54 +115,54 @@ private function getDateRange($startDate, $endDate)
 
     return $dateRange;
 }
-    // public function dashboard(){
-    //     $start_date = Carbon::now()->subDays(30); // Ngày bắt đầu, ví dụ lấy dữ liệu trong 30 ngày gần đây
-    //     $end_date = Carbon::now(); // Ngày kết thúc, hiện tại
-    //     $date_range = [];
-    //     $current_date = $start_date->copy();
-    //     while ($current_date->lte($end_date)) {
-    //         $date_range[] = $current_date->copy();
-    //         $current_date->addDay();
-    //     }
-    //     $orders = Order::whereBetween('orderDate', [$start_date,$end_date])
-    //                ->orderBy('orderDate')
-    //                ->get();
-    //     $data = [];
-    //     foreach ($date_range as $date) {
-    //         $formatted_date = $date->format('Y-m-d');
-    //         $data[$formatted_date] = 0; // Khởi tạo dữ liệu cho ngày này là 0
-    //     }
-    //     // $labels = $orders->pluck('orderDate')->map(function ($date) {
-    //     //     return Carbon::parse($date)->format('Y-m-d'); // Định dạng lại ngày theo định dạng mong muốn
-    //     // });
-    //     // dd($orders);
-    //     foreach ($orders as $order) {
-    //         $order_date = Carbon::parse($order->orderDate)->format('Y-m-d');
-    //         $data[$order_date] += 1; // Tăng giá trị đếm cho ngày này lên 1
-    //     }
-    //     // dd($productsWithSales);
-    //         // $data =[
-    //         //     'data'=>[
-    //         //         $data,
-    //         //         $labels
-    //         //     ]
-    //         // ];
-    //     return view('admin.components.home',compact('data'));
-    // }
     public function thongke(Request $request){
-        // dd($request);
-        $startDate = explode('-',$request->start_date);
-        $endDate = explode('-',$request->end_date);
-        $doanhthu = Order::select(
-                    Order::raw('YEAR(orderDate) AS year'),
-                    Order::raw('MONTH(orderDate) AS month'),
-                    Order::raw('SUM(totalMoney) AS doanhthu')
-                    )
-                    ->whereRaw("MONTH(orderDate)")
-                    ->groupBy('year', 'month')
-                    ->orderBy('year', 'desc')
-                    ->orderBy('month', 'desc')
-                    ->get();
+        $date = $request->date;
+        $danhmuc_id = $request->danhmuc;
         
+        
+        if($date == '7ngay'){
+            $startDate = Carbon::now()->subDays(8);
+            $endDate = Carbon::now()->subDays(1);
+            
+
+        }
+        else{
+            $startDate = Carbon::now()->subDays(30);
+            $endDate = Carbon::now()->subDays(1);
+        }
+        $data =  $this->getDLTK($startDate,$endDate,$danhmuc_id);
+            return response()->json(['data'=>$data]);
+    }
+    public function getDLTK($startDate, $endDate, $danhmuc_id){
+        $data =[];
+        $products = Product::where('category_id',$danhmuc_id)->get();
+        foreach ($products as $key => $item) {
+                if(!array_key_exists($item['name'], $data)){
+                    $newData =  $this->fillMissingDates($startDate,$endDate,$item['name']);
+                    $data[$item['name']] = $newData;
+                }
+            }
+            // dd($data);
+            $startDate = $startDate->format('Y-m-d');
+            $endDate = $endDate->format('Y-m-d');
+            
+            $salesData = OrderDetail::join('order', 'orderdetail.order_id', '=', 'order.id')
+                ->join('products', 'orderdetail.product_id', '=', 'products.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->whereBetween('order.orderDate', [$startDate, $endDate])
+                ->where('categories.id',$danhmuc_id)
+                ->selectRaw('products.name as product_name,DATE(order.orderDate) as date, sum(orderdetail.quantity * orderdetail.price) as doanhthu')
+                ->groupBy('product_name')
+                ->groupBy('date')
+                ->get();
+            foreach ($salesData as $index => $item) {
+                if(array_key_exists($item['product_name'],$data)){
+                    if(array_key_exists($item['date'],$data[$item['product_name']]['data'])){
+                        // var_dump($item['total_quantity']);
+                        $data[$item['product_name']]['data'][$item['date']] = (int) $item['doanhthu'];
+                    }
+                }
+            }
+            return $data;
     }
 }
