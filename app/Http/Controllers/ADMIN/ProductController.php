@@ -105,18 +105,17 @@ class ProductController extends Controller
             // dd($item);
             $image = new Images;
             $extenstion = $item->getClientOriginalExtension();
-            $filename = time().'.'.$extenstion;
+            $filename = time().'_'.uniqid().'.'.$extenstion;
             $item->move(public_path('/assets/uploads/'), $filename);
             $image->product_id  = $productID;
             $image->url = $filename;
             $image->save();
 
-            
         }
         toastr()->success('Thêm sản phẩm thành công');
-        return redirect('/admin/product');
+        return redirect()->route('product.index');
         } catch (\Throwable $th) {
-            toastr()->error("{$th}");
+            toastr()->error('Có lỗi khi thêm vui lòng thử lại');
             // toastr()->error('Có lỗi khi thêm sản phẩm vui lòng thử lại');
             return  redirect()->back();
         }
@@ -160,17 +159,22 @@ class ProductController extends Controller
         $product->description = $data['description'];
         $product->save();
         if(array_key_exists('image', $data)){
+            
             foreach ($data['image'] as $key => $item) {
                 $image = new Images;
                 $extenstion = $item->getClientOriginalExtension();
-                $filename = time().'.'.$extenstion;
+                $filename = time().'_'.uniqid().'.'.$extenstion;
                 $item->move(public_path('/assets/uploads/'), $filename);
                 $image->product_id  = $id;
                 $image->url = $filename;
+                // var_dump($filename);
                 $image->save();
             }
+            // dd('oke');
+
         }
-        return $this->index();
+         return redirect()->route('product.index');
+
     }
 
     /**
@@ -179,16 +183,29 @@ class ProductController extends Controller
 
     public function destroy(string $id)
     {
-        $product = Product::find($id);
+        // dd('oke');
+        try {
+            $product = Product::find($id);
         // dd($product);
         $product->delete();
         toastr()->success('Xóa sản phẩm thành công');
-        return redirect()->back();
+        return redirect()->route('product.index');
+        } catch (\Throwable $th) {
+            toastr()->error('Bạn chỉ có thể ẩn sản phẩm này');
+            return redirect()->route('product.index');
+        }
     }
     public function deleteProduct(Request $request){
-        $product = Product::whereIn('id',$request->id)->delete();
-        toastr()->success('Xóa sản phẩm thành công');
-        return response()->json(['code' => 200, 'message' => 'Xóa sản phẩm thành công']);
+        try {
+            $product = Product::whereIn('id',$request->id)->delete();
+            // dd('oke');
+            toastr()->success('Xóa sản phẩm thành công');
+            return response()->json(['code' => 200, 'message' => 'Xóa sản phẩm thành công']);
+        } catch (\Throwable $th) {
+            // throw $th;
+            // dd('oke');
+            return response()->json(['code' => 500, 'message' => 'Bạn không thể xóa tất cả sản phẩm đã chọn! Vui lòng xóa từng sản phẩm']);
+        }
     }
     public function changeStatus(Request $request){
         // dd($request->id);

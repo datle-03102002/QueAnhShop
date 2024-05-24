@@ -18,7 +18,7 @@
                                 </p>
 
                                 <ul class="slider-btn">
-                                    <li><a href="" class="btn btn-round btn-primary">Bắt
+                                    <li><a href="{{route('locsanpham')}}" class="btn btn-round btn-primary">Bắt
                                             đầu mua sắm</a></li>
                                 </ul>
                             </div>
@@ -206,7 +206,7 @@
                                             <div class="single-product">
                                                 <div class="product-image">
                                                     <a href="">
-                                                        <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}"
+                                                        <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}"
                                                             alt="">
                                                     </a>
                                                     <div class="action-links">
@@ -249,7 +249,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="">
-                                                    <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}"
+                                                    <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}"
                                                         alt="">
                                                 </a>
                                                 <div class="action-links">
@@ -289,7 +289,7 @@
                                         <div class="single-product">
                                             <div class="product-image">
                                                 <a href="">
-                                                    <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}"
+                                                    <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}"
                                                         alt="">
                                                 </a>
                                                 <div class="action-links">
@@ -347,8 +347,8 @@
 
                                 <div class="single-blog">
                                     <div class="blog-image">
-                                        <a href="{{ route('post.detail', ['slug' => $item->slug]) }}"><img
-                                                src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
+                                        <a href="{{ route('post.detail', ['slug' => $item->slug]) }}">
+                                            <img style="max-width: 100% !important;" src="{{ asset('assets/uploads/' . $item->image) }}" alt=""></a>
                                     </div>
                                     <div class="blog-content">
                                         <h4 class="title"><a
@@ -357,9 +357,9 @@
                                         <div class="articles-date">
                                             <p><span>{{ $item->created_at }}</span></p>
                                         </div>
-                                        {{-- <div class="four-line mb-4">
-                                        <p>{{ $item->description }}</p>
-                                    </div> --}}
+                                        <div class="four-line mb-4">
+                                            {!! $item->description !!}
+                                        </div>
 
                                         <div class="blog-footer">
                                             <a class="more"

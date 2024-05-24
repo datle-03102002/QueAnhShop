@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Category;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\DB;
@@ -69,14 +70,26 @@ class HomeController extends Controller
             }
         }
     }
+    $newOrder = Order::whereRaw('DATE(orderDate) = ?',[Carbon::now()->format('Y-m-d')])->count();
+    // dd($newOrder);
+    $dt = OrderDetail::join('order', 'orderdetail.order_id', '=', 'order.id')
+            ->whereRaw('DATE(orderDate) = ?',[Carbon::now()->format('Y-m-d')])
+            ->selectRaw('sum(orderdetail.quantity * orderdetail.price) as doanhthu')
+            ->first();
+    $newUser = User::whereRaw('DATE(created_at) = ?',[Carbon::now()->format('Y-m-d')])->count();
+            // dd($dt->doanhthu);
     $hotProduct = OrderDetail::join('order', 'orderdetail.order_id', '=', 'order.id')
                 ->join('products', 'orderdetail.product_id', '=', 'products.id')
                 ->whereBetween('order.orderDate', [$startDate, $endDate])
                 ->selectRaw('COUNT(orderdetail.product_id) as count, products.name,sum(orderdetail.quantity) as soluong, sum(orderdetail.quantity * orderdetail.price) as doanhthu')
                 ->groupby('products.name')
-                ->orderBy('count','desc')->get();
+                ->orderBy('count','desc')
+                ->orderBy('soluong','desc')
+                ->orderBy('doanhthu','desc')
+                ->limit(3)
+                ->get();
                 // dd($hotProduct);
-    return view('admin.components.home',compact('data','hotProduct'));
+    return view('admin.components.home',compact('data','hotProduct','newOrder','dt','newUser'));
 }
 
 private function fillMissingDates($startDate, $endDate,$label)

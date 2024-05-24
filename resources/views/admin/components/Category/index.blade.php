@@ -46,11 +46,6 @@
                 <a class="dropdown-item action" href="" data-action="show">Hiện danh mục
                 </a>
             </li>
-            <li>
-                <a class="dropdown-item action" href="" data-action="delete">Xóa danh mục
-                    <col>
-                </a>
-            </li>
         </ul>
         <table class=" container  table table-responsive-lg  ">
             <thead>

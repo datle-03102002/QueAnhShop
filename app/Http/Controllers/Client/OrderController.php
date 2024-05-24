@@ -318,6 +318,16 @@ class OrderController extends Controller
         // dd($cancelReson);
         try {
             $order =  Order::find($id);
+            $orderDetail = OrderDetail::where('order_id',$id)->get();
+            foreach($orderDetail as $item){
+                $productDetail = ProductDetail::where('color',$item->color)->where('size',$item->size)->where('product_id',$item->product_id)->first();
+                // dd($productDetail);
+                $productDetail->quantity +=$item->quantity;
+                $productDetail->save();
+                $product = Product::find($item->product_id);
+                $product->stock += $item->quantity;
+                $product->save();
+            }
             $order->cancelReson = $cancelReson;
             // dd($order->cancelReson);
             $order->status = 'Đã hủy';
@@ -560,7 +570,9 @@ class OrderController extends Controller
                 <td>'.$item->totalMoney.'</td>
                 <td class="d-flex justify-content-center">
                 <button class="bg-transparent border-0 p-0"><a
-                class="view-hover h3 mr-2" href=""
+                class="view-hover h3 mr-2" href="'.
+                route('chitietdonhang',['id'=>$item->id])
+                .'"
                 data-toggle="tooltip" data-placement="top"
                 title="Xem chi tiết" data-original-title="Xem chi tiết"><i
                 class="fa fa-eye"></i></a></button>

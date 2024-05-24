@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="col-lg-3">
-                            <div class="header-meta-info d-lg-flex ">
+                            <div class="header-meta-info d-lg-flex  position-relative ">
                                 <div class="header-search">
                                     <form action="{{ route('locsanpham') }}" method="get">
                                         <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm"
@@ -287,40 +287,28 @@
     });
 
     const blog = new Swiper(".blog-active", {
-
-
-        watchSlidesProgress: true,
-        slidesPerView: 4,
-        spaceBetween: 30,
-        centeredSlides: true,
-        loop: true,
         speed: 800,
-        autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        breakpoints: {
-            0: {
-                slidesPerView: 1,
-            },
-            576: {
-                slidesPerView: 2,
-            },
-            768: {
-                slidesPerView: 3,
-            },
-            992: {
-                slidesPerView: 4,
-            },
-        }
+		loop: false,
+		slidesPerView: 3,
+		spaceBetween: 30,
+		navigation: {
+		  nextEl: '.swiper-next',
+		  prevEl: '.swiper-prev',
+		},
+		breakpoints: {
+			0: {
+			  slidesPerView: 1,
+			},
+			576: {
+			  slidesPerView: 1,
+			},
+			768: {
+			  slidesPerView: 2,
+			},
+			992: {
+			  slidesPerView: 3,
+			},
+		}
     });
     const swiperNewProduct = new Swiper(".newProduct", {
 

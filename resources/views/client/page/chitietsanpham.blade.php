@@ -9,23 +9,32 @@
             position: relative;
             display: flex;
             flex-wrap: nowrap;
-            gap: 10px;
+            gap: 5px;
+            /* justify-content: space-between; */
         }
 
         .list-image .pre {
             position: absolute;
             top: 50%;
-            left: 10px;
+            left: 0rem;
             transform: translate(0, -50%);
-            /* animation: opac 0.5s ease-in-out;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    animation-iteration-count: infinite; */
+            font-size: 20px;
+
+            background-color: #cccccc;
+            color: white
+                /* animation: opac 0.5s ease-in-out;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            animation-iteration-count: infinite; */
         }
 
         .list-image .next {
             position: absolute;
             top: 50%;
-            right: 20px;
+            right: 0rem;
+            font-size: 20px;
             transform: translate(0, -50%);
+            /* background-color: transparent; */
+            background-color: #cccccc;
+            color: white
         }
 
         .image-item {
@@ -140,10 +149,11 @@
                     <div class="slide-image">
                         <div class="list-image mt-2">
                             @if (count($product->images) > 3)
-                                {
-                                <button class="next" onclick="ImageSlide('next')">Next</button>
-                                <button class="pre" onclick="ImageSlide('prev')">Pre</button>
-                                }
+                                <button class="next" onclick="ImageSlide('next')"><i class="fa fa-chevron-right"
+                                        aria-hidden="true"> </i></button>
+                                <button class="pre" onclick="ImageSlide('prev')">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                </button>
                             @endif
                             @foreach ($product->images as $key => $item)
                                 @if ($key == 0)

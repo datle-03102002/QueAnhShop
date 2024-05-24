@@ -2,6 +2,7 @@
 @section('content')
     <div class="cart-page section-padding-5">
         <div class="container">
+
             <div class="container__address">
                 <div class="container__address-css"></div>
                 <div class="container__address-content">
@@ -59,13 +60,20 @@
                     </tbody>
                 </table>
             </div>
-            <div class="row">
-                <div>
-                    Lưu ý: <span class="fw-bold ">Vui lòng kiểm tra hàng trước khi nhận hàng. Chúng tôi sẽ không chịu trách
-                        nhiệm sau khi bạn đã
-                        nhận hàng </span>
+            @if ($order->isCancel == 1)
+                <h3 style="color: red;">Đã hủy đơn hàng</h3>
+                <p class="fs-5 ">Lý do: {{ $order->cancelReson }}</p>
+            @else
+                <div class="row">
+                    <div>
+                        Lưu ý: <span class="fw-bold ">Vui lòng kiểm tra hàng trước khi nhận hàng. Chúng tôi sẽ không chịu
+                            trách
+                            nhiệm sau khi bạn đã
+                            nhận hàng </span>
+                    </div>
                 </div>
-            </div>
+            @endif
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="cart-totals shop-single-content">
@@ -135,8 +143,12 @@
                     },
                     success: function(data) {
                         if (data.code == 200) {
-                            const href = "{{ route('ordered') }}";
-                            window.location.href = href;
+                            // swal('Có lỗi khi hủy đơn hàng');
+                            swal('Hủy đơn hàng thành công');
+                            // setTimeout(() => {
+                                const href = "{{ route('ordered') }}";
+                                window.location.href = href;
+                            // }, 500);
                         } else {
                             swal('Có lỗi khi hủy đơn hàng');
                         }

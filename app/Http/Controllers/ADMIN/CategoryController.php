@@ -43,10 +43,12 @@ class CategoryController extends Controller
             $category->created_at  = Carbon::now();
             $category->save();
             DB::commit();
+            toastr()->success('Thêm danh mục thành công');
             return redirect("/admin/category");
         } catch (Throwable $th) {
             DB::rollBack();
             // dd("lỗi");?
+            toastr()->error('Có lỗi khi thêm danh mục');
             throw $th;
         }
         return redirect()->back()->withInput();
@@ -86,9 +88,11 @@ class CategoryController extends Controller
             // dd($category);
 
             DB::commit();
+            toastr()->success('Sửa danh mục thành công');
             return redirect("/admin/category");
         } catch (Throwable $th) {
             DB::rollback();
+            toastr()->erorr('Sửa danh mục thất bại');
             return redirect()->back()->withInput();
             throw $th;
 
@@ -96,9 +100,16 @@ class CategoryController extends Controller
     }
     public function destroy(string $id)
     {
-        $category = Category::find($id);
-        $category->delete();
-        return redirect("/admin/category");
+        try {
+            $category = Category::find($id);
+            $category->delete();
+            toastr()->success('Xóa danh mục thành công');
+            return redirect("/admin/category");
+        } catch (\Throwable $th) {
+            //throw $th;
+            toastr()->warning('Bạn chỉ được phép ẩn danh mục này!');
+            return redirect('/admin/category');
+        }
 
     }
     public function changeStatus(Request $request){

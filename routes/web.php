@@ -10,6 +10,7 @@ use App\Http\Controllers\ADMIN\CategoryController as AdminCategoryController;
 use App\Http\Controllers\ADMIN\OrderController as AdminOrderController;
 use App\Http\Controllers\ADMIN\PostController;
 use App\Http\Controllers\ADMIN\VoucherController;
+use App\Http\Controllers\ADMIN\SettingController;
 
 
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
@@ -37,6 +38,7 @@ Route::get('/register', function (){
     return view('client.page.auth.register');
 });
 Route::post('/login', [AuthController::class,'login'])->name('login');
+Route::get('/tin-tuc', [ClientHomecontroller::class,'tintuc'])->name('tintuc');
 Route::post('/register', [AuthController::class,'register'])->name('register');
 Route::get('/logout', [AuthController::class,'logout'])->name('logout');
 Route::post('goiytimkiem',[ClientHomecontroller::class,'goiysearch']);
@@ -50,7 +52,7 @@ Route::post('/deleteOrder',[OrderController::class,'deleteOrder']);
 Route::get('/chitietdonhang/{id}',[OrderController::class,'detailOrder'])->name('chitietdonhang');
 Route::get('/danhanhang/{id}',[OrderController::class,'danhanhang'])->name('danhanhang');
 Route::post('/comment', [OrderController::class,'postcomment'])->name('comment');
-    Route::get('/post/{slug}',[Homecontroller::class,'post'])->name('post.detail');
+    Route::get('/post/{slug}',[ClientHomeController::class,'post'])->name('post.detail');
     Route::get('/emptyCart',[CartController::class,'emptyCart'])->name('emptyCart');
 
 Route::middleware('api')->group(function(){
@@ -121,5 +123,8 @@ Route::middleware(['adminLogin'])->prefix('admin')->group(function () {
     //voucher
     Route::resource('voucher', VoucherController::class);
     Route::post('voucher/delete', [VoucherController::class,'deleteVoucher'])->name('voucher.delete');
+
+    //setting
+    Route::get('/setting',[SettingController::class,'index'])->name('admin.setting.website');
 });
 

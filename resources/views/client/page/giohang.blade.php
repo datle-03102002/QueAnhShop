@@ -67,7 +67,7 @@
                                             class="total-amount">{{ number_format($item->product->price * $item->quantity, 0, '.', '.') }}</span>
                                     </td>
                                     <td class="remove">
-                                        <button class="view-hover delete-pd-cart bg-transparent border-0 "
+                                        <button class="view-hover delete-item-cart delete-pd-cart bg-transparent border-0 "
                                             data-id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
@@ -192,9 +192,12 @@
                         }
                     }
                 })
-
-
             }
+            $('.delete-pd-cart').click(function() {
+            const idCart = $(this).data('id');
+            // console.log(token);
+            deleteTr(idCart);
+        })
             $(".action").click(function() {
                 handelChangeQuantity($(this).data('action'), $(this).data('id'))
             })
@@ -237,10 +240,6 @@
             }
         })
         let token = $('input[name="_token"]').val();
-        $('.delete-pd-cart').click(function() {
-            const idCart = $(this).data('id');
-            // console.log(token);
-            deleteTr(idCart);
-        })
+        
     </script>
 @endsection

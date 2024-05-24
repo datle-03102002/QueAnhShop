@@ -73,7 +73,7 @@
             </table>
             {{-- {{ $post->links() }} --}}
         @else
-            <h3>Chưa có bài viết nào</h3>
+            <h3>Chưa có khuyến mãi nào</h3>
         @endif
     </div>
 @endsection

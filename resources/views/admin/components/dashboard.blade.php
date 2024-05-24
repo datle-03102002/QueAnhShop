@@ -99,6 +99,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                       <a href="{{route('admin.setting.website')}}" class="nav-link">
+                            Cấu hình website
+                       </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('admin.logout') }}" class="nav-link">
                             {{-- <i class="icon-inbox"></i> --}}
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -123,11 +128,15 @@
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/template.js') }}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-    crossorigin="anonymous"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script> --}}
+@include('sweetalert::alert')
+<script src="{{ asset('assets/js/ckeditor.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('input[name="allID"]').change(function() {
+            // console.log('oke');
             if ($(this).is(':checked')) {
                 $('input[name="id"]').prop('checked', true);
             } else {
@@ -156,5 +165,10 @@
         }
         $('input[name="id"]').on('change', showOption)
     });
+
+    function closeModel() {
+        document.querySelector(".model").classList.remove('active')
+        document.querySelector(".model-content").innerHTML = '';
+    }
 </script>
 @yield('script')

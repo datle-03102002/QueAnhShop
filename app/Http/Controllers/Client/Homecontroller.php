@@ -82,7 +82,8 @@ class Homecontroller extends Controller
                 $query->where('price','<=',$max);
             }
             // dd($query->tosql());
-            $product = $query->paginate(3);
+            $product = $query->where('status',1)->paginate(3);
+            // dd($product);
             return view('client.page.store',compact('category','product'));
         }
     }
@@ -119,5 +120,9 @@ class Homecontroller extends Controller
         }
          
         return response()->json($data);
+    }
+    public function tintuc(){
+        $post = Post::where('status',1)->get();
+        return view('client.page.tintuc',compact('post'));
     }
 }

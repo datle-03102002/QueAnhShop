@@ -54,7 +54,7 @@
                                 <div class="single-product" style="">
                                     <div class="product-image">
                                         <a href="{{ route('chitietsanpham', ['name' => $item->slug]) }}">
-                                            <img src="{{ asset('assets/uploads/' . $item->images[1]->url) }}"
+                                            <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}"
                                                 alt="">
                                         </a>
                                         <div class="action-links">

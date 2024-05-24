@@ -17,6 +17,16 @@
                 .status {
                     margin: 0;
                 }
+
+                .description {
+                    overflow: hidden;
+                    /* border: none; */
+                    /* min-height: calc(1.5rem *4); */
+                    height: 100%;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 4;
+                }
             </style>
             <div class="row my-3 ">
                 <div class="col-9 d-flex ">
@@ -69,7 +79,7 @@
                                 </td>
                                 <td class="" scope="row">{{ $item->name }}</td>
                                 <td class="" scope="row">{{ $item->category->name }}</td>
-                                <td class="" scope="row">{{ $item->description }}</td>
+                                <td class="description" scope="row">{!! $item->description !!}</td>
                                 <td class="" scope="row">{{ $item->price }}</td>
                                 <td class="" scope="row">{{ $item->stock }}</td>
                                 <td class="" scope="row">
@@ -85,14 +95,15 @@
                                             href="{{ route('product.edit', ['product' => $item]) }}">
                                             Sửa
                                         </a>
-                                        <form class="d-inline mx-1"
+                                        <form class="d-inline mx-1" onsubmit="confirmDelete(this,event)"
                                             action="{{ route('product.destroy', ['product' => $item]) }}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <a class="btn btn-sm btn-primary"
-                                                href="{{ route('product.destroy', ['product' => $item]) }}"
-                                                onclick="return confirm('Bạn muốn xóa sản phẩm này?')">Xóa
-                                            </a>
+                                            <button type="submit" class="btn btn-sm btn-primary" >Xóa</button>
+                                            {{-- <a class="btn btn-sm btn-primary"
+                                                href="{{ route('product.destroy', ['product' => $item->id]) }}"
+                                                >Xóa
+                                            </a> --}}
                                         </form>
                                     </div>
                                 </td>
@@ -133,6 +144,26 @@
                 }
             })
         });
+        function  confirmDelete(form,event){
+            swal({
+                title: 'Thông báo',
+                text: 'Bạn muốn xóa sản phẩm này?',
+                icon: 'warning',
+                buttons: true
+                
+            })
+            .then((isConfirm) => {
+                if (!isConfirm) {
+                    console.log(event);
+                    event.preventDefault();
+                }
+                else{
+
+                    form.submit();
+                }
+            })
+            event.preventDefault();
+        }
         $(".action.dropdown-item").click(function(event) {
             event.preventDefault();
             const action = $(this).data('action');
@@ -207,6 +238,9 @@
                                         if (data.code == 200) {
                                             window.location.reload();
                                             // alert('Oke');
+                                        }
+                                        else{
+                                            swal('Thông báo',data.message,'warning');
                                         }
                                     },
                                     error: function(xhr, status, error) {

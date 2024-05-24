@@ -108,15 +108,28 @@ class OrderController extends Controller
             }
         }
         else{
-            
-                if($cash == 'chuathanhtoan'){
-                    
+                if($cash == 'all'){
                     if($status == 'choxacnhan'){
-                        $order = Order::where('paymentMethod','Thanh toán khi nhận hàng')->where('status','Chờ xác nhận')->where('status','<>','Đã nhận hàng')->orderByDesc('orderDate')->get();
+                        $order = Order::where('status','Chờ xác nhận')->orderByDesc('orderDate')->get();
                         return view('admin.components.Order.index',compact('order'));
                     }
                     else if($status == 'danggiao'){
-                        $order = Order::where('paymentMethod','Thanh toán khi nhận hàng')->where('status','Đang giao hàng')->where('status','<>','Đã nhận hàng')->orderByDesc('orderDate')->get();
+                        $order = Order::where('status','Đang giao hàng')->orderByDesc('orderDate')->get();
+                        return view('admin.components.Order.index',compact('order'));
+                    }
+                    else{
+                        $order = [];
+                        return view('admin.components.Order.index',compact('order'));
+                    }
+                }
+                else if ($cash == 'chuathanhtoan'){
+                    
+                    if($status == 'choxacnhan'){
+                        $order = Order::where('paymentMethod','Thanh toán khi nhận hàng')->where('status','Chờ xác nhận')->orderByDesc('orderDate')->get();
+                        return view('admin.components.Order.index',compact('order'));
+                    }
+                    else if($status == 'danggiao'){
+                        $order = Order::where('paymentMethod','Thanh toán khi nhận hàng')->where('status','Đang giao hàng')->orderByDesc('orderDate')->get();
                         return view('admin.components.Order.index',compact('order'));
                     }
                     else{

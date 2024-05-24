@@ -2,13 +2,15 @@
 @section('content')
     <div class="row mt-3 gap-2 justify-content-center ">
         <div class="col-3  h-auto p-lg-3 " style="border: 1px solid black;">
-            Đơn hàng mới hôm nay:
+            Đơn hàng mới hôm nay: {{ $newOrder }}
         </div>
         <div class="col-3  h-auto p-lg-3 " style="border: 1px solid black;">
-
+            Doanh thu ước tính : {{ number_format($dt->doanhthu, 2, '.', ',') }}đ
         </div>
-        <div class="col-3  h-auto p-lg-3 " style="border: 1px solid black;"></div>
-        <div class="col-3  h-auto p-lg-3 " style="border: 1px solid black;"></div>
+        <div class="col-3  h-auto p-lg-3 " style="border: 1px solid black;">
+            Số tài khoản mới : {{ $newUser }}
+        </div>
+
     </div>
 
     <div class="row mt-4">
@@ -38,7 +40,7 @@
                 @endforeach
             </table>
         @else
-            <h3>7 ngày trước bạn chưa có đơn hàng nào</h3>
+            <h3>Chưa có đơn hàng nào trong 7 ngày</h3>
         @endif
     </div>
     <div class="row mt-4">

@@ -30,15 +30,11 @@
     </form>
 @endsection
 @section('script')
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script> --}}
+
     <script>
         const a = document.querySelector('#editor');
-        console.log(a);
-        // ClassicEditor
-        //     .create(document.querySelector('#editor'))
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
+
         ClassicEditor
             .create(document.querySelector('#editor'), {
                 ckfinder: {
