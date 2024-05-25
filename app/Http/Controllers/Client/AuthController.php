@@ -85,6 +85,31 @@ class AuthController extends Controller
         
 
     }
+    public function profile(){
+        try {
+            $user = Auth::user();
+            return view('client.page.auth.profile', compact('user'));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    public function updateProfile(Request $request){
+        $oldPassword = $request->oldpassword;
+        // dd();
+        $newpassword = $request->newpassword;
+        if(Hash::check($oldPassword, Auth::user()->password)){
+            $user = User::find(Auth::id());
+            $user->password = Hash::make($newpassword);
+            $user->save();
+            toastr()->success('Cập nhật hồ sơ thành công');
+            return redirect('/hosocuatoi');
+        }
+        else{
+            $error = ['error' => 'Mật khẩu cũ không đúng'];
+            // $error = "Mật khẩu cũ không đúng";
+            return  redirect()->back()->withErrors($error)->withInput();
+        }
+    }
     public function addAddress(Request $request){
         try {
             $data = $request->only('name','address','phone');

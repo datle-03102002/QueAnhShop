@@ -39,6 +39,9 @@ Route::get('/register', function (){
 });
 Route::post('/login', [AuthController::class,'login'])->name('login');
 Route::get('/tin-tuc', [ClientHomecontroller::class,'tintuc'])->name('tintuc');
+Route::get('/hosocuatoi',[AuthController::class, 'profile'])->name('user.profile');
+Route::post('/hosocuatoi',[AuthController::class, 'updateProfile'])->name('user.update.profile');
+
 Route::post('/register', [AuthController::class,'register'])->name('register');
 Route::get('/logout', [AuthController::class,'logout'])->name('logout');
 Route::post('goiytimkiem',[ClientHomecontroller::class,'goiysearch']);
@@ -126,5 +129,6 @@ Route::middleware(['adminLogin'])->prefix('admin')->group(function () {
 
     //setting
     Route::get('/setting',[SettingController::class,'index'])->name('admin.setting.website');
+    Route::get('/setting/slide/{id}',[SettingController::class,'edit'])->name('admin.setting.slide');
 });
 

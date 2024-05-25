@@ -18,11 +18,11 @@ class OrderConfirm extends Mailable
      * Create a new message instance.
      */
     public Order $bill;
-    public $product;
-    public function __construct($order, $product1)
+    public $html;
+    public function __construct($order, $html)
 {
     $this->bill = $order;
-    $this->product = $product1;
+    $this->html = $html;
 }
     public function content(): Content
     {
@@ -30,7 +30,7 @@ class OrderConfirm extends Mailable
             view: 'mail.order.confirm',
             with: [
             'order' =>  $this->bill,
-            'cart'=>$this->product
+            'cart'=>$this->html
             ],
             // ->with('order',)
         );

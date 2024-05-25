@@ -180,8 +180,9 @@
 
                                 </ul>
                                 <div class="header-account d-flex ">
-                                    <div class="header-user">
+                                   
                                         @if (!Auth::check() || Auth::user()->role != 'khachhang')
+                                        <div class="header-user">
                                             <div class="d-flex ">
                                                 <a href="{{ route('login') }}"
                                                     class="link-underline link-underline-opacity-0 col-6">Đăng
@@ -193,7 +194,10 @@
                                                     ký
                                                 </a>
                                             </div>
+                                        </div>
                                         @else
+                                        <div class="header-user">
+
                                             <div class="dropdown">
                                                 <button class="btn  noborder dropdown-toggle text-primary"
                                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -201,7 +205,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <a class="dropdown-item" href="">Hồ
+                                                        <a class="dropdown-item" href="{{route('user.profile')}}">Hồ
                                                             sơ của tôi
                                                         </a>
                                                     </li>
@@ -217,13 +221,14 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        @endif
                                     </div>
                                     <div class="cart-block">
                                         <a href="{{ route('giohang') }}">
                                             <i class="fa-solid fa-cart-shopping w-100 fs-4"></i>
                                         </a>
-                                    </div>
+                                    </div>     
+                                        @endif
+                                    
 
                                 </div>
                             </div>
@@ -251,6 +256,7 @@
 {{-- <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script> --}}
 {{-- <script src="{{ asset('assets/js/main.js') }}"></script> --}}
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+{{-- <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script> --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
@@ -495,7 +501,7 @@
     function btnAddToCart(id) {
         const Authlogin = {!! json_encode(Auth::check()) !!};
         if (Authlogin) {
-            let quantityStock = document.querySelector(".quantity-item>span").textContent;
+            let quantityStock = document.querySelector(".quantity-item.active>span").textContent;
             // console.log(typeof quantityStock);
             let quantity = $(".quantity").val();
             // console.log(quantity <= parseInt(quantityStock));

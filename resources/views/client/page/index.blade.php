@@ -136,7 +136,7 @@
                         <div class="swiper-slide">
                             <div class="single-product">
                                 <div class="product-image">
-                                    <a href="">
+                                    <a href="{{ route('chitietsanpham', ['name' => $item->slug]) }}">
                                         <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}" alt="">
                                     </a>
                                     <div class="action-links">
@@ -205,7 +205,7 @@
                                         <div class="swiper-slide">
                                             <div class="single-product">
                                                 <div class="product-image">
-                                                    <a href="">
+                                                    <a href="{{ route('chitietsanpham', ['name' => $item->slug]) }}">
                                                         <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}"
                                                             alt="">
                                                     </a>
@@ -248,7 +248,7 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="">
+                                                <a href="{{ route('chitietsanpham', ['name' => $item->slug]) }}">
                                                     <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}"
                                                         alt="">
                                                 </a>
@@ -288,7 +288,7 @@
                                     <div class="swiper-slide">
                                         <div class="single-product">
                                             <div class="product-image">
-                                                <a href="">
+                                                <a href="{{ route('chitietsanpham', ['name' => $item->slug]) }}">
                                                     <img src="{{ asset('assets/uploads/' . $item->images[0]->url) }}"
                                                         alt="">
                                                 </a>

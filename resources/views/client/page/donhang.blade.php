@@ -35,13 +35,11 @@
                     <div class="my-account-menu mt-30">
                         <ul class="nav account-menu-list flex-column">
                             <li>
-                                <a href=""><i class="fa fa-user"></i> Hồ Sơ</a>
+                                <a href="{{route('user.profile')}}"><i class="fa fa-user"></i> Hồ Sơ</a>
                             </li>
+                            
                             <li>
-                                <a href=""><i class="fa fa-key"></i> Đổi Mật Khẩu</a>
-                            </li>
-                            <li>
-                                <a class="active"><i class="fa fa-shopping-cart"></i> Đơn Đặt Hàng</a>
+                                <a href="{{route('ordered')}}" class="active"><i class="fa fa-shopping-cart"></i> Đơn Đặt Hàng</a>
                             </li>
                         </ul>
                     </div>
@@ -226,9 +224,9 @@
                                                 <!-- Trường tải lên ảnh -->
                                                 <div>
                                                     <label for="image" class="text-start fs-6 ">Chọn hình ảnh: <i class="fa fa-camera" aria-hidden="true"></i></label>
-                                                <input id="image" type="file" name="review[${item['id']}][images]">
+                                                <input id="image" class="d-none" type="file" name="review[${item['id']}][images]">
                                                 </div>  
-                                                <input type="number" name="review[${item['id']}][rating]" min="1" max="5" placeholder="Đánh giá từ 1 đến 5" oninput="validity.valid||(value='5');" value="5" onchange="handelChangeRate(this)">
+                                                <input type="number" class="form-control-sm " name="review[${item['id']}][rating]" min="1" max="5" placeholder="Đánh giá từ 1 đến 5" oninput="validity.valid||(value='5');" value="5" onchange="handelChangeRate(this)">
                                             </div>
                                         </div>
                                     </div>`;

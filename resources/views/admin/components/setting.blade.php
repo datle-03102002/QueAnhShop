@@ -27,10 +27,10 @@
                 @endif
             </div>
             <div class="col-1">
-                Trái
+                {{$item->position == 'T'? 'Trái': 'Phải'}}
             </div>
             <div class="col-1">
-                <a href="" class="btn btn-primary ">Sửa</a>
+                <a href="{{route('admin.setting.slide',['id'=>$item->id])}}" class="btn btn-primary ">Sửa</a>
             </div>
         </div>
     @endforeach

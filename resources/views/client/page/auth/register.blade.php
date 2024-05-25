@@ -146,17 +146,24 @@
                 <i class="fa fa-user" aria-hidden="true"></i>
                 {{-- </span> --}}
                 <input type="text" name="name" id="username" placeholder="Tên đăng nhập" autocomplete="off"
-                    required>
+                    required value="{{old('name')}}">
             </div>
-            @error('username')
+            @error('name')
                 <span style="color: red">{{ $message }}</span>
             @enderror
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-phone"></span>
                 <input type="type" name="phonenumber" id="phone" placeholder="Số điện thoại " autocomplete="off"
-                    required>
+                    required value="{{old('phonenumber')}}">
             </div>
-            @error('phone')
+            @error('phonenumber')
+                <span style="color: red">{{ $message }}</span>
+            @enderror
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-email"></span>
+                <input type="email" name="email" id="email" placeholder="Email" autocomplete="off" value="{{old('email')}}">
+            </div>
+            @error('email')
                 <span style="color: red">{{ $message }}</span>
             @enderror
             <div class="form-field d-flex align-items-center">
@@ -167,13 +174,7 @@
             @error('password')
                 <span style="color: red">{{ $message }}</span>
             @enderror
-            <div class="form-field d-flex align-items-center">
-                <span class="fas fa-email"></span>
-                <input type="email" name="email" id="email" placeholder="Email" autocomplete="off">
-            </div>
-            @error('email')
-                <span style="color: red">{{ $message }}</span>
-            @enderror
+            
             <button class="btn mt-3 " type="submit">Đăng ký</button>
         </form>
         {{-- <div class="text-center fs-6 mt-1">

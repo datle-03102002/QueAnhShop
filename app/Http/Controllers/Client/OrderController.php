@@ -15,9 +15,11 @@ use App\Models\Voucher;
 use App\Models\Comment;
 use DB;
 use Carbon\Carbon;
-use App\Mail\OrderConfirm;
-use Mail;
+// use Mail;
+use App\Events\SendMail;
 use Log;
+use Session;
+
 
 class OrderController extends Controller
 {
@@ -67,8 +69,10 @@ class OrderController extends Controller
                 $order->save();
                 $order_id = $order->id;
                 // dd('oke');
+                $hmtlCartItem = '';
                 foreach ($cart as $item) {
                     // dd($cart);
+                    
                     try { 
                         $od = new OrderDetail;
                         $od->product_id = $item->product_id;
@@ -96,16 +100,24 @@ class OrderController extends Controller
                         $product->save();
                         $od->price = $product->price;
                         $od->save();
+                        $hmtlCartItem.="<tr>
+                                        <td>".$product->name."
+                                        <td>".$item['size']."-".$item['color']."</td>
+                                        <td>".$item['quantity']."</td>
+                                        <td>".number_format($product->price, 0, ',', '.') ."đ</td>
+                                    </tr>";
                     } catch (\Throwable $th) {
                         Log::error($th);
                         DB::rollback(); 
                     }
                 }
                 DB::commit();
+                // event(new SendMail($email, $order, $carts));
                 // Mail::to(Auth::user()->email)->send(new OrderConfirm($order,$cart));
                 Cart::where('user_id', Auth::id())->delete();
                 // $cart->delete();
                 toastr()->success('Đặt hàng thành công');
+                // event(new SendMail(Auth::user()->email, $order,$hmtlCartItem));
                 return redirect()->route('ordered');
             } catch (Throwable  $e) {
                 var_dump($e);
@@ -132,7 +144,7 @@ class OrderController extends Controller
     }
 
     public function responseVNPAY(Request $request){
-        dd($request);
+        // dd($request);
         $vnp_SecureHash = $request->vnp_SecureHash;
         $vnp_HashSecret = 'NAVBRQKIYHLUQBUWRGJFKDZKOVFNGYOO';
         $inputData = array();
@@ -222,7 +234,7 @@ class OrderController extends Controller
                 }
                 DB::commit();
                 session()->forget('address_id');
-                Mail::to(Auth::user()->email)->send(new OrderConfirm($order,$cart));
+                // Mail::to(Auth::user()->email)->send(new OrderConfirm($order,$cart));
                 toastr()->success('Đặt hàng thành công');
                 Cart::where('user_id', Auth::id())->delete();
 
@@ -233,7 +245,7 @@ class OrderController extends Controller
                 }   
             }
             else{
-
+                return redirect()->route('giohang');
             }
         }
     }
@@ -301,7 +313,7 @@ class OrderController extends Controller
     }
 
     public function ordered(){
-        $allOrders = Order::where('user_id',Auth::id())->orderBy('cancelReson')->orderBy('orderDate')->paginate(10);
+        $allOrders = Order::where('user_id',Auth::id())->orderBy('cancelReson')->orderBy('orderDate','desc')->paginate(10);
         return view('client.page.donhang',compact('allOrders'));
     }
     public function detailOrder($id){

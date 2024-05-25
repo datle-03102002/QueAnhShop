@@ -12,4 +12,8 @@ class SettingController extends Controller
         $slide = Slide::all();
         return view('admin.components.setting',compact('slide'));
     }
+    public function edit(string $id){
+        $slide = Slide::find($id);
+        return view('admin.components.settingSlide',compact('slide'));
+    }
 }

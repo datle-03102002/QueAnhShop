@@ -35,7 +35,7 @@ class Homecontroller extends Controller
     }
     public function cuahang(){
         
-        $product = Product::where('status',1)->paginate(3);
+        $product = Product::where('status',1)->paginate(9);
         // dd($product);
         return view('client.page.store',compact('product'));
     }
@@ -82,7 +82,7 @@ class Homecontroller extends Controller
                 $query->where('price','<=',$max);
             }
             // dd($query->tosql());
-            $product = $query->where('status',1)->paginate(3);
+            $product = $query->where('status',1)->paginate(9);
             // dd($product);
             return view('client.page.store',compact('category','product'));
         }

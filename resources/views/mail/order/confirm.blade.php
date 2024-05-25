@@ -4,66 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Email Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        p {
+            color: #666666;
+        }
+
+        .products {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .products th,
+        .products td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .thank-you {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="content">
-        <h2>Thông báo đặt hàng</h2>
-        <h3>Mã đơn hàng: {{ $bill->id }}</h3>
-        <div class="cart-table table-responsive ">
-            @csrf
-            <table class="table ">
-                <thead>
-                    <tr>
-                        <th class="image">Hình Ảnh</th>
-                        <th class="product">Sản Phẩm</th>
-                        <th class="price">Giá</th>
-                        <th class="quantity">Số Lượng</th>
-                        <th class="total">Tổng</th>
-                        <th class="remove">Xóa</th>
-                    </tr>
-                </thead>
-                <tbody>
+    <div class="container">
+        <h1>Thông báo đặt hàng</h1>
+        <p>Cảm ơn bạn đã đặt hàng tại cửa hàng chúng tôi. Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>
+        <div class="recipient-info">
+            <p><strong>Thông tin người nhận: </strong></p>
+            <p>Tên: {{ $order->customerName }}</p>
+            <p>Địa chỉ: {{ $order->address }}</p>
+            <p>Số điện thoại: {{ $order->phone }}</p>
+        </div>
+        <table class="products">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Loại</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{$cart}}
+            </tbody>
+        </table>
 
-                    @foreach ($cart as $item)
-                        <tr class="product-item id-{{ $item->id }}">
-                            <td class="image">
-
-                                <img src="{{ asset('assets/uploads/' . $item->product->images[0]->url) }}"
-                                    alt="">
-                            </td>
-                            <td class="product">
-
-                                {{ $item->product->name }}
-
-                                <span>Mã sản phẩm: {{ $item->product->id }}</span>
-                                <span>Loại: {{ $item->color }}-{{ $item->size }}</span>
-                                <span class="text-primary">Còn Lại: {{ $item->stock }}</span>
-                                {{-- <input type="hidden" class="Quantity" id="Quantity-56-Size8-9Y" value="42"> --}}
-                            </td>
-                            <td class="price">
-                                <span class="amount">{{ number_format($item->product->price, 0, '.', ',') }}</span>
-                            </td>
-                            <td class="quantity">
-                                <div class="quantity d-inline-flex align-items-center border-0 ">
-                                    <span>{{ $item->quantity }}</span>
-
-                                </div>
-                            </td>
-                            <td class="total">
-                                <span
-                                    class="total-amount">{{ number_format($item->product->price * $item->quantity, 0, '.', ',') }}</span>
-                            </td>
-                            <td class="remove">
-                                <button class="view-hover delete-pd-cart bg-transparent border-0 "
-                                    data-id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="thank-you">
+            <p>Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất có thể.</p>
         </div>
     </div>
 </body>

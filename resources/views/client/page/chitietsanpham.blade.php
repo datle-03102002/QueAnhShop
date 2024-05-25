@@ -9,7 +9,7 @@
             position: relative;
             display: flex;
             flex-wrap: nowrap;
-            gap: 5px;
+            gap: 15px;
             /* justify-content: space-between; */
         }
 
